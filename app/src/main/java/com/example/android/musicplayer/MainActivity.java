@@ -271,9 +271,9 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         else{
-            long songId = musicCursor.getLong(musicCursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID));
-            String songName = musicCursor.getString(musicCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE));
             do{
+                long songId = musicCursor.getLong(musicCursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID));
+                String songName = musicCursor.getString(musicCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE));
                 playList.add(new PlayList(songId, songName));
             } while(musicCursor.moveToNext());
         }
