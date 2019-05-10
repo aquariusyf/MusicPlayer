@@ -1,6 +1,10 @@
 package com.example.android.musicplayer;
 
+import android.content.ContentResolver;
+import android.content.ContentUris;
+import android.database.Cursor;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +22,7 @@ import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -244,6 +249,34 @@ public class MainActivity extends AppCompatActivity {
         }
         Log.v("Main", "second: " + second);
         timerText.setText(minute + " : " + second);
+    }
+
+    public void loadMusic(){
+        ContentResolver musicContentResolver = getContentResolver();
+        Uri musicUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+        Cursor musicCursor = musicContentResolver.query(musicUri, null, null, null, null);
+        if(musicCursor == null){
+            Toast.makeText(getApplicationContext(), getString(R.string.load_music_failed), Toast.LENGTH_LONG).show();
+            playList.add(new PlayList(R.raw.gaobaiqiqiu,"告白气球"));
+            return;
+        }
+        else if(!musicCursor.moveToFirst()){
+            Toast.makeText(getApplicationContext(), getString(R.string.no_music_found), Toast.LENGTH_LONG).show();
+            playList.add(new PlayList(R.raw.gaobaiqiqiu,"告白气球"));
+            return;
+        }
+        else{
+            long songId = musicCursor.getLong(musicCursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID));
+            String songName = musicCursor.getString(musicCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE));
+            do{
+                playList.add(new PlayList(songId, songName));
+            } while(musicCursor.moveToNext());
+        }
+    }
+
+    public void setMediaPlayer(MediaPlayer mediaPlayer, long songId) throws IOException {
+        Uri songUri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, songId);
+        mediaPlayer.setDataSource(getApplicationContext(), songUri);
     }
 }
 

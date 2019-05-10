@@ -1,15 +1,15 @@
 package com.example.android.musicplayer;
 
 public class PlayList {
-    private int mMedia;
+    private long mMedia;
     private String mSongName;
 
-    public PlayList(int mediaSource, String songName){
+    public PlayList(long mediaSource, String songName){
         this.mMedia = mediaSource;
         this.mSongName = songName;
     }
 
-    public int getmMedia(){
+    public long getmMedia(){
         return this.mMedia;
     }
 

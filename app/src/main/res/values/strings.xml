@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">MusicPlayer</string>
+    <string name="load_music_failed">Load songs failed!</string>
+    <string name="no_music_found">No song file found!</string>
 </resources>
