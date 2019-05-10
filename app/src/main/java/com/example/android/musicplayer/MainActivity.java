@@ -27,6 +27,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    private final String LOG_TAG = MainActivity.this.getClass().getSimpleName();
     private static final int MY_PERMISSION_REQUEST = 1;
     private TextView mMarqueeText;
     private TextView mTimerText;
@@ -84,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
         mSeekBar = (SeekBar)(findViewById(R.id.seekbar));
         mSeekBar.setEnabled(false);
         mMarqueeText = (TextView) findViewById(R.id.marquee_text);
-        mMarqueeText.setText("------");
+        mMarqueeText.setText(getString(R.string.marquee_default));
         mMarqueeText.setSelected(true);
         mTimerText = findViewById(R.id.timer_text_view);
 
@@ -116,22 +117,22 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 if(mMediaPlayer != null && mMediaPlayer.getCurrentPosition() != 0) {
                     mMediaPlayer.start();
-                    Toast.makeText(MainActivity.this, "Continue", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, getString(R.string.toast_continue), Toast.LENGTH_SHORT).show();
                 }
                 else if((mMediaPlayer == null && !mPlayList.isEmpty()) ||
                         (mMediaPlayer != null && mMediaPlayer.getCurrentPosition() == 0)){
                     releaseMediaPlayer();
-                    Toast.makeText(MainActivity.this, "Playing", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, getString(R.string.toast_playing), Toast.LENGTH_SHORT).show();
                     mMediaPlayer = setMediaPlayer(mMediaPlayer, mPlayList.get(mMediaIndex).getmMedia());
                     mMediaPlayer.start();
-                    Log.v("MainActivity", "Start Playing!!!");
+                    Log.v(LOG_TAG, "Start Playing!!!" + mPlayList.get(mMediaIndex).getmSongName());
                     mMediaPlayer.setOnCompletionListener(mCompletionListener);
                     updateMarqueeText(mPlayList.get(mMediaIndex));
                     mSeekBar.setMax(mMediaPlayer.getDuration());
                     updateSeekBar();
                 }
                 else{
-                    Toast.makeText(MainActivity.this, "No songs found!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this, getString(R.string.toast_no_song_found), Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -142,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v){
                 if(mMediaPlayer != null && mMediaPlayer.isPlaying()) {
                     mMediaPlayer.pause();
-                    Toast.makeText(MainActivity.this, "Paused", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, getString(R.string.toast_pause), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -152,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(mMediaPlayer != null){
-                    Toast.makeText(MainActivity.this, "STOPPED", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, getString(R.string.toast_stop), Toast.LENGTH_SHORT).show();
                     mMediaPlayer.seekTo(0);
                     mMediaPlayer.pause();
                 }
@@ -165,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v){
                 if(mMediaPlayer == null)
                     return;
-                Toast.makeText(MainActivity.this, "NEXT", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, getString(R.string.toast_next), Toast.LENGTH_SHORT).show();
                 releaseMediaPlayer();
                 if(mMediaIndex == mPlayList.size() - 1){
                     mMediaIndex = 0;
@@ -189,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v){
                 if(mMediaPlayer == null)
                     return;
-                Toast.makeText(MainActivity.this, "PREVIOUS", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, getString(R.string.toast_previous), Toast.LENGTH_SHORT).show();
                 releaseMediaPlayer();
                 if(mMediaIndex == 0){
                     mMediaIndex = mPlayList.size() - 1;
@@ -256,23 +257,23 @@ public class MainActivity extends AppCompatActivity {
     private void updateTimer(int position){
         int p = position/1000;
         int min = p/60;
-        Log.v("Main", "min: " + min);
+        Log.v(LOG_TAG, "min: " + min);
         String minute = Integer.toString(min);
         if(min < 10){
             String temp = minute;
             minute = "0";
             minute += temp;
         }
-        Log.v("Main", "minute: " + minute);
+        Log.v(LOG_TAG, "minute: " + minute);
         int sec = p%60;
-        Log.v("Main", "sec: " + sec);
+        Log.v(LOG_TAG, "sec: " + sec);
         String second = Integer.toString(sec);
         if(sec < 10){
             String temp = second;
             second = "0";
             second += temp;
         }
-        Log.v("Main", "second: " + second);
+        Log.v(LOG_TAG, "second: " + second);
         mTimerText.setText(minute + " : " + second);
     }
 
@@ -285,7 +286,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         else if(!musicCursor.moveToFirst()){
-            Toast.makeText(getApplicationContext(), getString(R.string.no_music_found), Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.toast_no_song_found), Toast.LENGTH_LONG).show();
             return;
         }
         else{

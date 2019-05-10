@@ -1,5 +1,12 @@
 <resources>
     <string name="app_name">MusicPlayer</string>
     <string name="load_music_failed">Load songs failed!</string>
-    <string name="no_music_found">No song file found!</string>
+    <string name="marquee_default">------</string>
+    <string name="toast_playing">PLAYING</string>
+    <string name="toast_continue">CONTINUE</string>
+    <string name="toast_pause">PAUSED</string>
+    <string name="toast_stop">STOPPED</string>
+    <string name="toast_next">NEXT</string>
+    <string name="toast_previous">PREVIOUS</string>
+    <string name="toast_no_song_found">NO SONGS FOUND</string>
 </resources>
