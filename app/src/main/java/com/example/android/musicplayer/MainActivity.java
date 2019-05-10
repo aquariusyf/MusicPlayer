@@ -46,11 +46,11 @@ public class MainActivity extends AppCompatActivity {
             releaseMediaPlayer();
             if(mediaIndex == playList.size() - 1){
                 mediaIndex = 0;
-                mediaPlayer = MediaPlayer.create(MainActivity.this, playList.get(mediaIndex).getmMedia());
+                setMediaPlayer(mediaPlayer, playList.get(mediaIndex).getmMedia());
             }
             else{
                 mediaIndex++;
-                mediaPlayer = MediaPlayer.create(MainActivity.this, playList.get(mediaIndex).getmMedia());
+                setMediaPlayer(mediaPlayer, playList.get(mediaIndex).getmMedia());
             }
             mediaPlayer.start();
             mediaPlayer.setOnCompletionListener(mCompletionListener);
@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
                     releaseMediaPlayer();
                 }
                 mediaIndex = position;
-                mediaPlayer = MediaPlayer.create(MainActivity.this, playList.get(mediaIndex).getmMedia());
+                setMediaPlayer(mediaPlayer, playList.get(mediaIndex).getmMedia());
                 mediaPlayer.start();
                 mediaPlayer.setOnCompletionListener(mCompletionListener);
                 updateMarqueeText(playList.get(mediaIndex));
@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
                 else{
                     releaseMediaPlayer();
                     Toast.makeText(MainActivity.this, "Playing", Toast.LENGTH_SHORT).show();
-                    mediaPlayer = MediaPlayer.create(MainActivity.this, playList.get(mediaIndex).getmMedia());
+                    setMediaPlayer(mediaPlayer, playList.get(mediaIndex).getmMedia());
                     mediaPlayer.start();
                     Log.v("MainActivity", "Start Playing!!!");
                     mediaPlayer.setOnCompletionListener(mCompletionListener);
@@ -151,11 +151,11 @@ public class MainActivity extends AppCompatActivity {
                 releaseMediaPlayer();
                 if(mediaIndex == playList.size() - 1){
                     mediaIndex = 0;
-                    mediaPlayer = MediaPlayer.create(MainActivity.this, playList.get(mediaIndex).getmMedia());
+                    setMediaPlayer(mediaPlayer, playList.get(mediaIndex).getmMedia());
                 }
                 else{
                     mediaIndex++;
-                    mediaPlayer = MediaPlayer.create(MainActivity.this, playList.get(mediaIndex).getmMedia());
+                    setMediaPlayer(mediaPlayer, playList.get(mediaIndex).getmMedia());
                 }
                 mediaPlayer.start();
                 mediaPlayer.setOnCompletionListener(mCompletionListener);
@@ -173,11 +173,11 @@ public class MainActivity extends AppCompatActivity {
                 releaseMediaPlayer();
                 if(mediaIndex == 0){
                     mediaIndex = playList.size() - 1;
-                    mediaPlayer = MediaPlayer.create(MainActivity.this, playList.get(mediaIndex).getmMedia());
+                    setMediaPlayer(mediaPlayer, playList.get(mediaIndex).getmMedia());
                 }
                 else{
                     mediaIndex--;
-                    mediaPlayer = MediaPlayer.create(MainActivity.this, playList.get(mediaIndex).getmMedia());
+                    setMediaPlayer(mediaPlayer, playList.get(mediaIndex).getmMedia());
                 }
                 mediaPlayer.start();
                 mediaPlayer.setOnCompletionListener(mCompletionListener);
@@ -274,9 +274,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void setMediaPlayer(MediaPlayer mediaPlayer, long songId) throws IOException {
+    public void setMediaPlayer(MediaPlayer mediaPlayer, long songId) {
         Uri songUri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, songId);
-        mediaPlayer.setDataSource(getApplicationContext(), songUri);
+        try {
+            mediaPlayer.setDataSource(getApplicationContext(), songUri);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
 
