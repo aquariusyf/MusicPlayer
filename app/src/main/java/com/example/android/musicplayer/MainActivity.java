@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
         }
         loadMusic();
         seekBar = (SeekBar)(findViewById(R.id.seekbar));
+        seekBar.setEnabled(false);
         marqueeText = (TextView) findViewById(R.id.marquee_text);
         marqueeText.setText("------");
         marqueeText.setSelected(true);
@@ -110,11 +111,14 @@ public class MainActivity extends AppCompatActivity {
         playButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                if(mediaPlayer != null && mediaPlayer.getCurrentPosition() != 0){
+                if(mediaPlayer != null && mediaPlayer.isPlaying())
+                    return;
+                if(mediaPlayer != null && mediaPlayer.getCurrentPosition() != 0) {
                     mediaPlayer.start();
                     Toast.makeText(MainActivity.this, "Continue", Toast.LENGTH_SHORT).show();
                 }
-                else{
+                else if((mediaPlayer == null && !playList.isEmpty()) ||
+                        (mediaPlayer != null && mediaPlayer.getCurrentPosition() == 0)){
                     releaseMediaPlayer();
                     Toast.makeText(MainActivity.this, "Playing", Toast.LENGTH_SHORT).show();
                     mediaPlayer = setMediaPlayer(mediaPlayer, playList.get(mediaIndex).getmMedia());
@@ -125,6 +129,9 @@ public class MainActivity extends AppCompatActivity {
                     seekBar.setMax(mediaPlayer.getDuration());
                     updateSeekBar();
                 }
+                else{
+                    Toast.makeText(MainActivity.this, "No songs found!", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -132,9 +139,10 @@ public class MainActivity extends AppCompatActivity {
         pauseButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Toast.makeText(MainActivity.this, "Paused", Toast.LENGTH_SHORT).show();
-                if(mediaPlayer.isPlaying())
+                if(mediaPlayer != null && mediaPlayer.isPlaying()) {
                     mediaPlayer.pause();
+                    Toast.makeText(MainActivity.this, "Paused", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -142,9 +150,11 @@ public class MainActivity extends AppCompatActivity {
         stopButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "STOPPED", Toast.LENGTH_SHORT).show();
-                mediaPlayer.seekTo(0);
-                mediaPlayer.pause();
+                if(mediaPlayer != null){
+                    Toast.makeText(MainActivity.this, "STOPPED", Toast.LENGTH_SHORT).show();
+                    mediaPlayer.seekTo(0);
+                    mediaPlayer.pause();
+                }
             }
         });
 
@@ -152,6 +162,8 @@ public class MainActivity extends AppCompatActivity {
         nextButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+                if(mediaPlayer == null)
+                    return;
                 Toast.makeText(MainActivity.this, "NEXT", Toast.LENGTH_SHORT).show();
                 releaseMediaPlayer();
                 if(mediaIndex == playList.size() - 1){
@@ -174,6 +186,8 @@ public class MainActivity extends AppCompatActivity {
         previousButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+                if(mediaPlayer == null)
+                    return;
                 Toast.makeText(MainActivity.this, "PREVIOUS", Toast.LENGTH_SHORT).show();
                 releaseMediaPlayer();
                 if(mediaIndex == 0){
@@ -195,6 +209,9 @@ public class MainActivity extends AppCompatActivity {
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if(mediaPlayer == null)
+                    return;
+                seekBar.setEnabled(true);
                 if(fromUser){
                     mediaPlayer.seekTo(progress);
                     updateTimer(mediaPlayer.getCurrentPosition());
@@ -205,12 +222,14 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                mediaPlayer.pause();
+                if(mediaPlayer != null)
+                    mediaPlayer.pause();
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                mediaPlayer.start();
+                if(mediaPlayer != null)
+                    mediaPlayer.start();
             }
         });
     }
