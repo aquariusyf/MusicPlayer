@@ -284,6 +284,7 @@ public class MainActivity extends AppCompatActivity {
         mediaPlayer = new MediaPlayer();
         try {
             mediaPlayer.setDataSource(getApplicationContext(), songUri);
+            mediaPlayer.prepare();
         } catch (IOException e) {
             e.printStackTrace();
         }
