@@ -16,15 +16,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,35 +28,40 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     private static final int MY_PERMISSION_REQUEST = 1;
-    private TextView marqueeText;
-    private TextView timerText;
-    private SeekBar seekBar;
-    private Handler seekHandler = new Handler();
-    private Runnable run = new Runnable() {
+    private TextView mMarqueeText;
+    private TextView mTimerText;
+    private SeekBar mSeekBar;
+    private ImageView mPlayButton;
+    private ImageView mPauseButton;
+    private ImageView mStopButton;
+    private ImageView mNextButton;
+    private ImageView mPreviousButton;
+    private Handler mSeekHandler = new Handler();
+    private Runnable mRun = new Runnable() {
         @Override
         public void run() {
             updateSeekBar();
         }
     };
-    private MediaPlayer mediaPlayer;
-    private int mediaIndex = 0;
-    private ArrayList<PlayList> playList = new ArrayList<PlayList>();
+    private MediaPlayer mMediaPlayer;
+    private int mMediaIndex = 0;
+    private ArrayList<PlayList> mPlayList = new ArrayList<PlayList>();
     private MediaPlayer.OnCompletionListener mCompletionListener = new MediaPlayer.OnCompletionListener() {
         @Override
         public void onCompletion(MediaPlayer mp) {
             releaseMediaPlayer();
-            if(mediaIndex == playList.size() - 1){
-                mediaIndex = 0;
-                mediaPlayer = setMediaPlayer(mediaPlayer, playList.get(mediaIndex).getmMedia());
+            if(mMediaIndex == mPlayList.size() - 1){
+                mMediaIndex = 0;
+                mMediaPlayer = setMediaPlayer(mMediaPlayer, mPlayList.get(mMediaIndex).getmMedia());
             }
             else{
-                mediaIndex++;
-                mediaPlayer = setMediaPlayer(mediaPlayer, playList.get(mediaIndex).getmMedia());
+                mMediaIndex++;
+                mMediaPlayer = setMediaPlayer(mMediaPlayer, mPlayList.get(mMediaIndex).getmMedia());
             }
-            mediaPlayer.start();
-            mediaPlayer.setOnCompletionListener(mCompletionListener);
-            seekBar.setMax(mediaPlayer.getDuration());
-            updateMarqueeText(playList.get(mediaIndex));
+            mMediaPlayer.start();
+            mMediaPlayer.setOnCompletionListener(mCompletionListener);
+            mSeekBar.setMax(mMediaPlayer.getDuration());
+            updateMarqueeText(mPlayList.get(mMediaIndex));
         }
     };
 
@@ -80,53 +81,53 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         loadMusic();
-        seekBar = (SeekBar)(findViewById(R.id.seekbar));
-        seekBar.setEnabled(false);
-        marqueeText = (TextView) findViewById(R.id.marquee_text);
-        marqueeText.setText("------");
-        marqueeText.setSelected(true);
-        timerText = findViewById(R.id.timer_text_view);
+        mSeekBar = (SeekBar)(findViewById(R.id.seekbar));
+        mSeekBar.setEnabled(false);
+        mMarqueeText = (TextView) findViewById(R.id.marquee_text);
+        mMarqueeText.setText("------");
+        mMarqueeText.setSelected(true);
+        mTimerText = findViewById(R.id.timer_text_view);
 
-        PlayItemAdapter playItemAdapter = new PlayItemAdapter(this, playList);
+        PlayItemAdapter playItemAdapter = new PlayItemAdapter(this, mPlayList);
         ListView listView = (ListView) findViewById(R.id.play_list);
         listView.setAdapter(playItemAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(mediaPlayer != null){
-                    mediaPlayer.pause();
+                if(mMediaPlayer != null){
+                    mMediaPlayer.pause();
                     releaseMediaPlayer();
                 }
-                mediaIndex = position;
-                mediaPlayer = setMediaPlayer(mediaPlayer, playList.get(mediaIndex).getmMedia());
-                mediaPlayer.start();
-                mediaPlayer.setOnCompletionListener(mCompletionListener);
-                updateMarqueeText(playList.get(mediaIndex));
-                seekBar.setMax(mediaPlayer.getDuration());
+                mMediaIndex = position;
+                mMediaPlayer = setMediaPlayer(mMediaPlayer, mPlayList.get(mMediaIndex).getmMedia());
+                mMediaPlayer.start();
+                mMediaPlayer.setOnCompletionListener(mCompletionListener);
+                updateMarqueeText(mPlayList.get(mMediaIndex));
+                mSeekBar.setMax(mMediaPlayer.getDuration());
                 updateSeekBar();
             }
         });
 
-        final ImageView playButton = (ImageView) findViewById(R.id.play_btn);
-        playButton.setOnClickListener(new View.OnClickListener(){
+        mPlayButton = findViewById(R.id.play_btn);
+        mPlayButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                if(mediaPlayer != null && mediaPlayer.isPlaying())
+                if(mMediaPlayer != null && mMediaPlayer.isPlaying())
                     return;
-                if(mediaPlayer != null && mediaPlayer.getCurrentPosition() != 0) {
-                    mediaPlayer.start();
+                if(mMediaPlayer != null && mMediaPlayer.getCurrentPosition() != 0) {
+                    mMediaPlayer.start();
                     Toast.makeText(MainActivity.this, "Continue", Toast.LENGTH_SHORT).show();
                 }
-                else if((mediaPlayer == null && !playList.isEmpty()) ||
-                        (mediaPlayer != null && mediaPlayer.getCurrentPosition() == 0)){
+                else if((mMediaPlayer == null && !mPlayList.isEmpty()) ||
+                        (mMediaPlayer != null && mMediaPlayer.getCurrentPosition() == 0)){
                     releaseMediaPlayer();
                     Toast.makeText(MainActivity.this, "Playing", Toast.LENGTH_SHORT).show();
-                    mediaPlayer = setMediaPlayer(mediaPlayer, playList.get(mediaIndex).getmMedia());
-                    mediaPlayer.start();
+                    mMediaPlayer = setMediaPlayer(mMediaPlayer, mPlayList.get(mMediaIndex).getmMedia());
+                    mMediaPlayer.start();
                     Log.v("MainActivity", "Start Playing!!!");
-                    mediaPlayer.setOnCompletionListener(mCompletionListener);
-                    updateMarqueeText(playList.get(mediaIndex));
-                    seekBar.setMax(mediaPlayer.getDuration());
+                    mMediaPlayer.setOnCompletionListener(mCompletionListener);
+                    updateMarqueeText(mPlayList.get(mMediaIndex));
+                    mSeekBar.setMax(mMediaPlayer.getDuration());
                     updateSeekBar();
                 }
                 else{
@@ -135,121 +136,121 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        ImageView pauseButton = (ImageView) findViewById(R.id.pause_btn);
-        pauseButton.setOnClickListener(new View.OnClickListener(){
+        mPauseButton = findViewById(R.id.pause_btn);
+        mPauseButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                if(mediaPlayer != null && mediaPlayer.isPlaying()) {
-                    mediaPlayer.pause();
+                if(mMediaPlayer != null && mMediaPlayer.isPlaying()) {
+                    mMediaPlayer.pause();
                     Toast.makeText(MainActivity.this, "Paused", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
-        ImageView stopButton = (ImageView) findViewById(R.id.stop_btn);
-        stopButton.setOnClickListener(new View.OnClickListener(){
+        mStopButton = findViewById(R.id.stop_btn);
+        mStopButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                if(mediaPlayer != null){
+                if(mMediaPlayer != null){
                     Toast.makeText(MainActivity.this, "STOPPED", Toast.LENGTH_SHORT).show();
-                    mediaPlayer.seekTo(0);
-                    mediaPlayer.pause();
+                    mMediaPlayer.seekTo(0);
+                    mMediaPlayer.pause();
                 }
             }
         });
 
-        ImageView nextButton = (ImageView) (findViewById(R.id.next_btn));
-        nextButton.setOnClickListener(new View.OnClickListener(){
+        mNextButton = (findViewById(R.id.next_btn));
+        mNextButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                if(mediaPlayer == null)
+                if(mMediaPlayer == null)
                     return;
                 Toast.makeText(MainActivity.this, "NEXT", Toast.LENGTH_SHORT).show();
                 releaseMediaPlayer();
-                if(mediaIndex == playList.size() - 1){
-                    mediaIndex = 0;
-                    mediaPlayer = setMediaPlayer(mediaPlayer, playList.get(mediaIndex).getmMedia());
+                if(mMediaIndex == mPlayList.size() - 1){
+                    mMediaIndex = 0;
+                    mMediaPlayer = setMediaPlayer(mMediaPlayer, mPlayList.get(mMediaIndex).getmMedia());
                 }
                 else{
-                    mediaIndex++;
-                    mediaPlayer = setMediaPlayer(mediaPlayer, playList.get(mediaIndex).getmMedia());
+                    mMediaIndex++;
+                    mMediaPlayer = setMediaPlayer(mMediaPlayer, mPlayList.get(mMediaIndex).getmMedia());
                 }
-                mediaPlayer.start();
-                mediaPlayer.setOnCompletionListener(mCompletionListener);
-                updateMarqueeText(playList.get(mediaIndex));
-                seekBar.setMax(mediaPlayer.getDuration());
+                mMediaPlayer.start();
+                mMediaPlayer.setOnCompletionListener(mCompletionListener);
+                updateMarqueeText(mPlayList.get(mMediaIndex));
+                mSeekBar.setMax(mMediaPlayer.getDuration());
                 updateSeekBar();
             }
         });
 
-        ImageView previousButton = (ImageView) (findViewById(R.id.previous_btn));
-        previousButton.setOnClickListener(new View.OnClickListener(){
+        mPreviousButton = (findViewById(R.id.previous_btn));
+        mPreviousButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                if(mediaPlayer == null)
+                if(mMediaPlayer == null)
                     return;
                 Toast.makeText(MainActivity.this, "PREVIOUS", Toast.LENGTH_SHORT).show();
                 releaseMediaPlayer();
-                if(mediaIndex == 0){
-                    mediaIndex = playList.size() - 1;
-                    mediaPlayer = setMediaPlayer(mediaPlayer, playList.get(mediaIndex).getmMedia());
+                if(mMediaIndex == 0){
+                    mMediaIndex = mPlayList.size() - 1;
+                    mMediaPlayer = setMediaPlayer(mMediaPlayer, mPlayList.get(mMediaIndex).getmMedia());
                 }
                 else{
-                    mediaIndex--;
-                    mediaPlayer = setMediaPlayer(mediaPlayer, playList.get(mediaIndex).getmMedia());
+                    mMediaIndex--;
+                    mMediaPlayer = setMediaPlayer(mMediaPlayer, mPlayList.get(mMediaIndex).getmMedia());
                 }
-                mediaPlayer.start();
-                mediaPlayer.setOnCompletionListener(mCompletionListener);
-                updateMarqueeText(playList.get(mediaIndex));
-                seekBar.setMax(mediaPlayer.getDuration());
+                mMediaPlayer.start();
+                mMediaPlayer.setOnCompletionListener(mCompletionListener);
+                updateMarqueeText(mPlayList.get(mMediaIndex));
+                mSeekBar.setMax(mMediaPlayer.getDuration());
                 updateSeekBar();
             }
         });
 
-        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if(mediaPlayer == null)
+                if(mMediaPlayer == null)
                     return;
                 seekBar.setEnabled(true);
                 if(fromUser){
-                    mediaPlayer.seekTo(progress);
-                    updateTimer(mediaPlayer.getCurrentPosition());
+                    mMediaPlayer.seekTo(progress);
+                    updateTimer(mMediaPlayer.getCurrentPosition());
                 }
                 if(!fromUser)
-                    updateTimer(mediaPlayer.getCurrentPosition());
+                    updateTimer(mMediaPlayer.getCurrentPosition());
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                if(mediaPlayer != null)
-                    mediaPlayer.pause();
+                if(mMediaPlayer != null)
+                    mMediaPlayer.pause();
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                if(mediaPlayer != null)
-                    mediaPlayer.start();
+                if(mMediaPlayer != null)
+                    mMediaPlayer.start();
             }
         });
     }
 
     private void releaseMediaPlayer(){
-        if(mediaPlayer != null){
-            mediaPlayer.release();
-            mediaPlayer = null;
+        if(mMediaPlayer != null){
+            mMediaPlayer.release();
+            mMediaPlayer = null;
         }
     }
 
     private void updateMarqueeText(PlayList playItem){
         String str = playItem.getmSongName();
-        marqueeText.setText(str + "          ");
-        updateTimer(mediaPlayer.getCurrentPosition());
+        mMarqueeText.setText(str + "          ");
+        updateTimer(mMediaPlayer.getCurrentPosition());
     }
 
     private void updateSeekBar(){
-        seekBar.setProgress(mediaPlayer.getCurrentPosition());
-        seekHandler.postDelayed(run, 1000);
+        mSeekBar.setProgress(mMediaPlayer.getCurrentPosition());
+        mSeekHandler.postDelayed(mRun, 1000);
     }
 
     private void updateTimer(int position){
@@ -272,7 +273,7 @@ public class MainActivity extends AppCompatActivity {
             second += temp;
         }
         Log.v("Main", "second: " + second);
-        timerText.setText(minute + " : " + second);
+        mTimerText.setText(minute + " : " + second);
     }
 
     public void loadMusic(){
@@ -291,7 +292,7 @@ public class MainActivity extends AppCompatActivity {
             do{
                 long songId = musicCursor.getLong(musicCursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID));
                 String songName = musicCursor.getString(musicCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE));
-                playList.add(new PlayList(songId, songName));
+                mPlayList.add(new PlayList(songId, songName));
             } while(musicCursor.moveToNext());
         }
     }
