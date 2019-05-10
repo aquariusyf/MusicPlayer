@@ -262,12 +262,10 @@ public class MainActivity extends AppCompatActivity {
         Cursor musicCursor = musicContentResolver.query(musicUri, null, null, null, null);
         if(musicCursor == null){
             Toast.makeText(getApplicationContext(), getString(R.string.load_music_failed), Toast.LENGTH_LONG).show();
-            playList.add(new PlayList(R.raw.gaobaiqiqiu,"告白气球"));
             return;
         }
         else if(!musicCursor.moveToFirst()){
             Toast.makeText(getApplicationContext(), getString(R.string.no_music_found), Toast.LENGTH_LONG).show();
-            playList.add(new PlayList(R.raw.gaobaiqiqiu,"告白气球"));
             return;
         }
         else{
