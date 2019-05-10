@@ -1,12 +1,16 @@
 package com.example.android.musicplayer;
 
+import android.Manifest;
 import android.content.ContentResolver;
 import android.content.ContentUris;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,6 +31,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final int MY_PERMISSION_REQUEST = 1;
     private TextView marqueeText;
     private TextView timerText;
     private SeekBar seekBar;
@@ -46,11 +51,11 @@ public class MainActivity extends AppCompatActivity {
             releaseMediaPlayer();
             if(mediaIndex == playList.size() - 1){
                 mediaIndex = 0;
-                setMediaPlayer(mediaPlayer, playList.get(mediaIndex).getmMedia());
+                mediaPlayer = setMediaPlayer(mediaPlayer, playList.get(mediaIndex).getmMedia());
             }
             else{
                 mediaIndex++;
-                setMediaPlayer(mediaPlayer, playList.get(mediaIndex).getmMedia());
+                mediaPlayer = setMediaPlayer(mediaPlayer, playList.get(mediaIndex).getmMedia());
             }
             mediaPlayer.start();
             mediaPlayer.setOnCompletionListener(mCompletionListener);
@@ -64,17 +69,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        playList.add(new PlayList(R.raw.gaobaiqiqiu,"告白气球"));
-        playList.add(new PlayList(R.raw.tiantiande, "甜甜的"));
-        playList.add(new PlayList(R.raw.sugar, "Sugar"));
-        playList.add(new PlayList(R.raw.daoxiang, "稻香"));
-        playList.add(new PlayList(R.raw.chulianfensexi, "初恋粉色系"));
-        playList.add(new PlayList(R.raw.maiyatang, "麦芽糖"));
-        playList.add(new PlayList(R.raw.qingge, "情歌"));
-        playList.add(new PlayList(R.raw.ruguowomenbucengxiangyu, "如果我们不曾相遇"));
-        playList.add(new PlayList(R.raw.tingjianxiayudeshengyin, "听见下雨的声音"));
-        playList.add(new PlayList(R.raw.xiaoqingge, "小情歌"));
-        playList.add(new PlayList(R.raw.xuemaojiao, "学猫叫"));
+        if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+            if(ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)){
+                ActivityCompat.requestPermissions(MainActivity.this,
+                        new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, MY_PERMISSION_REQUEST);
+            }
+            else{
+                ActivityCompat.requestPermissions(MainActivity.this,
+                        new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, MY_PERMISSION_REQUEST);
+            }
+        }
+        loadMusic();
         seekBar = (SeekBar)(findViewById(R.id.seekbar));
         marqueeText = (TextView) findViewById(R.id.marquee_text);
         marqueeText.setText("------");
@@ -92,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
                     releaseMediaPlayer();
                 }
                 mediaIndex = position;
-                setMediaPlayer(mediaPlayer, playList.get(mediaIndex).getmMedia());
+                mediaPlayer = setMediaPlayer(mediaPlayer, playList.get(mediaIndex).getmMedia());
                 mediaPlayer.start();
                 mediaPlayer.setOnCompletionListener(mCompletionListener);
                 updateMarqueeText(playList.get(mediaIndex));
@@ -112,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
                 else{
                     releaseMediaPlayer();
                     Toast.makeText(MainActivity.this, "Playing", Toast.LENGTH_SHORT).show();
-                    setMediaPlayer(mediaPlayer, playList.get(mediaIndex).getmMedia());
+                    mediaPlayer = setMediaPlayer(mediaPlayer, playList.get(mediaIndex).getmMedia());
                     mediaPlayer.start();
                     Log.v("MainActivity", "Start Playing!!!");
                     mediaPlayer.setOnCompletionListener(mCompletionListener);
@@ -151,11 +156,11 @@ public class MainActivity extends AppCompatActivity {
                 releaseMediaPlayer();
                 if(mediaIndex == playList.size() - 1){
                     mediaIndex = 0;
-                    setMediaPlayer(mediaPlayer, playList.get(mediaIndex).getmMedia());
+                    mediaPlayer = setMediaPlayer(mediaPlayer, playList.get(mediaIndex).getmMedia());
                 }
                 else{
                     mediaIndex++;
-                    setMediaPlayer(mediaPlayer, playList.get(mediaIndex).getmMedia());
+                    mediaPlayer = setMediaPlayer(mediaPlayer, playList.get(mediaIndex).getmMedia());
                 }
                 mediaPlayer.start();
                 mediaPlayer.setOnCompletionListener(mCompletionListener);
@@ -173,11 +178,11 @@ public class MainActivity extends AppCompatActivity {
                 releaseMediaPlayer();
                 if(mediaIndex == 0){
                     mediaIndex = playList.size() - 1;
-                    setMediaPlayer(mediaPlayer, playList.get(mediaIndex).getmMedia());
+                    mediaPlayer = setMediaPlayer(mediaPlayer, playList.get(mediaIndex).getmMedia());
                 }
                 else{
                     mediaIndex--;
-                    setMediaPlayer(mediaPlayer, playList.get(mediaIndex).getmMedia());
+                    mediaPlayer = setMediaPlayer(mediaPlayer, playList.get(mediaIndex).getmMedia());
                 }
                 mediaPlayer.start();
                 mediaPlayer.setOnCompletionListener(mCompletionListener);
@@ -274,13 +279,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void setMediaPlayer(MediaPlayer mediaPlayer, long songId) {
+    public MediaPlayer setMediaPlayer(MediaPlayer mediaPlayer, long songId) {
         Uri songUri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, songId);
+        mediaPlayer = new MediaPlayer();
         try {
             mediaPlayer.setDataSource(getApplicationContext(), songUri);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return mediaPlayer;
     }
 }
 
