@@ -71,13 +71,13 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_alignParentLeft="true"
-            android:layout_marginTop="39dp"/>
+            android:layout_margin="16dp"/>
 
         <ImageView
             android:src="@drawable/baseline_play_circle_outline_white_18dp"
             android:id="@+id/play_btn"
             android:layout_width="0dp"
-            android:layout_height="75dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_margin="16dp"
             android:layout_alignParentTop="true" />
@@ -89,7 +89,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_alignParentRight="true"
-            android:layout_marginTop="39dp"/>
+            android:layout_margin="16dp"/>
 
     </LinearLayout>
 </LinearLayout>
