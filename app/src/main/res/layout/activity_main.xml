@@ -61,8 +61,8 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="24dp"
-        android:layout_marginLeft="75dp"
-        android:layout_marginRight="75dp">
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp">
 
         <ImageView
             android:src="@drawable/baseline_skip_previous_white_18dp"
@@ -70,9 +70,17 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="39dp"/>
+
+        <ImageView
+            android:src="@drawable/baseline_play_circle_outline_white_18dp"
+            android:id="@+id/play_btn"
+            android:layout_width="0dp"
+            android:layout_height="75dp"
+            android:layout_weight="1"
             android:layout_margin="16dp"
-            android:layout_above="@+id/play_btn"
-            android:layout_alignParentLeft="true"/>
+            android:layout_alignParentTop="true" />
 
         <ImageView
             android:src="@drawable/baseline_skip_next_white_18dp"
@@ -80,47 +88,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_margin="16dp"
-            android:layout_above="@+id/stop_btn"
-            android:layout_alignParentRight="true"/>
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="39dp"/>
 
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:src="@drawable/baseline_pause_circle_outline_white_18dp"
-            android:id="@+id/pause_btn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_margin="16dp"
-            android:layout_toRightOf="@+id/play_btn"
-            android:layout_alignParentBottom="true"/>
-
-        <ImageView
-            android:src="@drawable/baseline_play_circle_outline_white_18dp"
-        android:id="@+id/play_btn"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_margin="16dp"
-        android:layout_alignParentBottom="true" />
-
-    <ImageView
-        android:src="@drawable/baseline_stop_white_18dp"
-        android:id="@+id/stop_btn"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_margin="16dp"
-        android:layout_toRightOf="@+id/pause_btn"
-        android:layout_alignParentBottom="true"/>
-
-    </LinearLayout>
-
 </LinearLayout>

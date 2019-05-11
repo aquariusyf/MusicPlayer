@@ -33,8 +33,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView mTimerText;
     private SeekBar mSeekBar;
     private ImageView mPlayButton;
-    private ImageView mPauseButton;
-    private ImageView mStopButton;
     private ImageView mNextButton;
     private ImageView mPreviousButton;
     private Handler mSeekHandler = new Handler();
@@ -102,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
                 mMediaIndex = position;
                 mMediaPlayer = setMediaPlayer(mMediaPlayer, mPlayList.get(mMediaIndex).getmMedia());
                 mMediaPlayer.start();
+                mPlayButton.setImageResource(R.drawable.baseline_pause_circle_outline_white_18dp);
                 mMediaPlayer.setOnCompletionListener(mCompletionListener);
                 updateMarqueeText(mPlayList.get(mMediaIndex));
                 mSeekBar.setMax(mMediaPlayer.getDuration());
@@ -113,10 +112,15 @@ public class MainActivity extends AppCompatActivity {
         mPlayButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                if(mMediaPlayer != null && mMediaPlayer.isPlaying())
+                if(mMediaPlayer != null && mMediaPlayer.isPlaying()){
+                    mMediaPlayer.pause();
+                    mPlayButton.setImageResource(R.drawable.baseline_play_circle_outline_white_18dp);
+                    Toast.makeText(MainActivity.this, getString(R.string.toast_pause), Toast.LENGTH_SHORT).show();
                     return;
+                }
                 if(mMediaPlayer != null && mMediaPlayer.getCurrentPosition() != 0) {
                     mMediaPlayer.start();
+                    mPlayButton.setImageResource(R.drawable.baseline_pause_circle_outline_white_18dp);
                     Toast.makeText(MainActivity.this, getString(R.string.toast_continue), Toast.LENGTH_SHORT).show();
                 }
                 else if((mMediaPlayer == null && !mPlayList.isEmpty()) ||
@@ -125,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, getString(R.string.toast_playing), Toast.LENGTH_SHORT).show();
                     mMediaPlayer = setMediaPlayer(mMediaPlayer, mPlayList.get(mMediaIndex).getmMedia());
                     mMediaPlayer.start();
+                    mPlayButton.setImageResource(R.drawable.baseline_pause_circle_outline_white_18dp);
                     Log.v(LOG_TAG, "Start Playing!!!" + mPlayList.get(mMediaIndex).getmSongName());
                     mMediaPlayer.setOnCompletionListener(mCompletionListener);
                     updateMarqueeText(mPlayList.get(mMediaIndex));
@@ -133,29 +138,6 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else{
                     Toast.makeText(MainActivity.this, getString(R.string.toast_no_song_found), Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-
-        mPauseButton = findViewById(R.id.pause_btn);
-        mPauseButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                if(mMediaPlayer != null && mMediaPlayer.isPlaying()) {
-                    mMediaPlayer.pause();
-                    Toast.makeText(MainActivity.this, getString(R.string.toast_pause), Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-        mStopButton = findViewById(R.id.stop_btn);
-        mStopButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                if(mMediaPlayer != null){
-                    Toast.makeText(MainActivity.this, getString(R.string.toast_stop), Toast.LENGTH_SHORT).show();
-                    mMediaPlayer.seekTo(0);
-                    mMediaPlayer.pause();
                 }
             }
         });
@@ -177,6 +159,7 @@ public class MainActivity extends AppCompatActivity {
                     mMediaPlayer = setMediaPlayer(mMediaPlayer, mPlayList.get(mMediaIndex).getmMedia());
                 }
                 mMediaPlayer.start();
+                mPlayButton.setImageResource(R.drawable.baseline_pause_circle_outline_white_18dp);
                 mMediaPlayer.setOnCompletionListener(mCompletionListener);
                 updateMarqueeText(mPlayList.get(mMediaIndex));
                 mSeekBar.setMax(mMediaPlayer.getDuration());
@@ -201,6 +184,7 @@ public class MainActivity extends AppCompatActivity {
                     mMediaPlayer = setMediaPlayer(mMediaPlayer, mPlayList.get(mMediaIndex).getmMedia());
                 }
                 mMediaPlayer.start();
+                mPlayButton.setImageResource(R.drawable.baseline_pause_circle_outline_white_18dp);
                 mMediaPlayer.setOnCompletionListener(mCompletionListener);
                 updateMarqueeText(mPlayList.get(mMediaIndex));
                 mSeekBar.setMax(mMediaPlayer.getDuration());
@@ -230,8 +214,10 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                if(mMediaPlayer != null)
+                if(mMediaPlayer != null){
                     mMediaPlayer.start();
+                    mPlayButton.setImageResource(R.drawable.baseline_pause_circle_outline_white_18dp);
+                }
             }
         });
     }
