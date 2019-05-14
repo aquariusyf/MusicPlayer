@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView mMarqueeText;
     private TextView mTimerText;
     private SeekBar mSeekBar;
+    private TextView mTotalTime;
     private ImageView mPlayButton;
     private ImageView mNextButton;
     private ImageView mPreviousButton;
@@ -60,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
             mMediaPlayer.start();
             mMediaPlayer.setOnCompletionListener(mCompletionListener);
             mSeekBar.setMax(mMediaPlayer.getDuration());
+            updateTotalTime(mMediaPlayer.getDuration());
             updateMarqueeText(mPlayList.get(mMediaIndex));
         }
     };
@@ -86,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
         mMarqueeText.setText(getString(R.string.marquee_default));
         mMarqueeText.setSelected(true);
         mTimerText = findViewById(R.id.timer_text_view);
+        mTotalTime = findViewById(R.id.total_time_text_view);
 
         PlayItemAdapter playItemAdapter = new PlayItemAdapter(this, mPlayList);
         ListView listView = (ListView) findViewById(R.id.play_list);
@@ -104,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
                 mMediaPlayer.setOnCompletionListener(mCompletionListener);
                 updateMarqueeText(mPlayList.get(mMediaIndex));
                 mSeekBar.setMax(mMediaPlayer.getDuration());
+                updateTotalTime(mMediaPlayer.getDuration());
                 updateSeekBar();
             }
         });
@@ -134,6 +138,7 @@ public class MainActivity extends AppCompatActivity {
                     mMediaPlayer.setOnCompletionListener(mCompletionListener);
                     updateMarqueeText(mPlayList.get(mMediaIndex));
                     mSeekBar.setMax(mMediaPlayer.getDuration());
+                    updateTotalTime(mMediaPlayer.getDuration());
                     updateSeekBar();
                 }
                 else{
@@ -163,6 +168,7 @@ public class MainActivity extends AppCompatActivity {
                 mMediaPlayer.setOnCompletionListener(mCompletionListener);
                 updateMarqueeText(mPlayList.get(mMediaIndex));
                 mSeekBar.setMax(mMediaPlayer.getDuration());
+                updateTotalTime(mMediaPlayer.getDuration());
                 updateSeekBar();
             }
         });
@@ -188,6 +194,7 @@ public class MainActivity extends AppCompatActivity {
                 mMediaPlayer.setOnCompletionListener(mCompletionListener);
                 updateMarqueeText(mPlayList.get(mMediaIndex));
                 mSeekBar.setMax(mMediaPlayer.getDuration());
+                updateTotalTime(mMediaPlayer.getDuration());
                 updateSeekBar();
             }
         });
@@ -261,6 +268,25 @@ public class MainActivity extends AppCompatActivity {
         }
         Log.v(LOG_TAG, "second: " + second);
         mTimerText.setText(minute + " : " + second);
+    }
+
+    private void updateTotalTime(int duration){
+        int totalTime = duration/1000;
+        int min = totalTime/60;
+        int sec = totalTime%60;
+        String minute = Integer.toString(min);
+        String second = Integer.toString(sec);
+        if(min < 10){
+            String temp = minute;
+            minute = "0";
+            minute += temp;
+        }
+        if(sec < 10){
+            String temp = second;
+            second = "0";
+            second += temp;
+        }
+        mTotalTime.setText(minute + " : " + second);
     }
 
     public void loadMusic(){
