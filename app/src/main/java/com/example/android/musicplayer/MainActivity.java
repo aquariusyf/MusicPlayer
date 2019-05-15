@@ -26,8 +26,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -76,6 +74,11 @@ public class MainActivity extends AppCompatActivity {
             updateMarqueeText(mPlayList.get(mMediaIndex));
         }
     };
+    private ImageView mRepeat;
+    private ImageView mShuffle;
+    private boolean mIsRepeatAll;
+    private boolean mIsRepeatOne;
+    private boolean mIsShuffle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
         }
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
         initVolumeSeekBar();
+        initRepeatAndShuffleButton();
         loadMusic();
         mSeekBar = (SeekBar)(findViewById(R.id.seekbar));
         mSeekBar.setEnabled(false);
@@ -434,6 +438,16 @@ public class MainActivity extends AppCompatActivity {
         volume = Integer.toString(percentage);
         volume += "%";
         mVolume.setText(volume);
+    }
+
+    private void initRepeatAndShuffleButton(){
+        mIsRepeatAll = true;
+        mIsRepeatOne = false;
+        mIsShuffle = false;
+        mRepeat = findViewById(R.id.repeat_button);
+        mShuffle = findViewById(R.id.shuffle_button);
+        mRepeat.setBackgroundColor(getResources().getColor(R.color.color_selected));
+        mShuffle.setBackgroundColor(getResources().getColor(R.color.color_not_selected));
     }
 
     public MediaPlayer setMediaPlayer(MediaPlayer mediaPlayer, long songId) {
