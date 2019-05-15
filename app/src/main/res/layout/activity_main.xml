@@ -109,6 +109,46 @@
             android:layout_weight="1"
             android:layout_alignParentRight="true"
             android:layout_margin="16dp"/>
-
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="50dp">
+
+        <ImageView
+            android:id="@+id/mute_image_view"
+            android:src="@drawable/baseline_volume_up_white_18dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:layout_gravity="center_horizontal"
+            android:paddingLeft="48dp"/>
+
+        <SeekBar
+            android:id="@+id/volume_seekbar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="6"
+            android:layout_centerInParent="true"
+            android:thumbTint="#F5F5F5"
+            android:progressTint="#FFFFFF"
+            android:progressBackgroundTint="#FFF8DC"
+            android:thumb="@drawable/baseline_pets_white_18dp" />
+
+        <TextView
+            android:id="@+id/volume_text_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:layout_gravity="center_horizontal"
+            android:textColor="#FFFFFF"
+            android:textSize="10sp"
+            android:fontFamily="@font/charlotte"
+            tools:text="50%"/>
+    </LinearLayout>
+
 </LinearLayout>
