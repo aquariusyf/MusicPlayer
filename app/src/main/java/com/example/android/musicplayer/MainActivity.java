@@ -3,8 +3,10 @@ package com.example.android.musicplayer;
 import android.Manifest;
 import android.content.ContentResolver;
 import android.content.ContentUris;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Handler;
@@ -14,6 +16,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -23,6 +26,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -33,6 +38,10 @@ public class MainActivity extends AppCompatActivity {
     private TextView mTimerText;
     private SeekBar mSeekBar;
     private TextView mTotalTime;
+    private SeekBar mVolumeSeekBar;
+    private AudioManager mAudioManager;
+    private TextView mVolume;
+    private ImageView mMute;
     private ImageView mPlayButton;
     private ImageView mNextButton;
     private ImageView mPreviousButton;
@@ -81,6 +90,8 @@ public class MainActivity extends AppCompatActivity {
                         new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, MY_PERMISSION_REQUEST);
             }
         }
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
+        initVolumeSeekBar();
         loadMusic();
         mSeekBar = (SeekBar)(findViewById(R.id.seekbar));
         mSeekBar.setEnabled(false);
@@ -308,6 +319,71 @@ public class MainActivity extends AppCompatActivity {
                 mPlayList.add(new PlayList(songId, songName));
             } while(musicCursor.moveToNext());
         }
+    }
+
+    private void initVolumeSeekBar(){
+        try{
+            mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+            mVolumeSeekBar = findViewById(R.id.volume_seekbar);
+            mMute = findViewById(R.id.mute_image_view);
+            mVolume = findViewById(R.id.volume_text_view);
+            mVolumeSeekBar.setMax(mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC));
+            mVolumeSeekBar.setProgress(mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC));
+            mVolumeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, progress, 0);
+                    updateVolumeText();
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        updateVolumeText();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event){
+        if(mAudioManager == null)
+            return super.onKeyDown(keyCode, event);
+        if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
+            try{
+                mVolumeSeekBar.setProgress(mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC) - 1);
+            } catch (Error e) {
+
+            }
+        } else if (keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
+            try{
+                mVolumeSeekBar.setProgress(mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC) + 1);
+            } catch (Error e) {
+
+            }
+        }
+        updateVolumeText();
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private void updateVolumeText(){
+        String volume = new String();
+        double currentVolume = (double) mVolumeSeekBar.getProgress();
+        double maxVolume = (double) mVolumeSeekBar.getMax();
+        Log.v(LOG_TAG, "current volume: " + currentVolume);
+        Log.v(LOG_TAG, "Max volume: " + maxVolume);
+        int percentage = (int) (currentVolume/maxVolume * 100);
+        Log.v(LOG_TAG, "Percentage: " + percentage);
+        volume = Integer.toString(percentage);
+        volume += "%";
+        mVolume.setText(volume);
     }
 
     public MediaPlayer setMediaPlayer(MediaPlayer mediaPlayer, long songId) {
