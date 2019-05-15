@@ -76,9 +76,10 @@ public class MainActivity extends AppCompatActivity {
     };
     private ImageView mRepeat;
     private ImageView mShuffle;
-    private boolean mIsRepeatAll;
-    private boolean mIsRepeatOne;
-    private boolean mIsShuffle;
+    private int mPlayState;
+    private static final int REPEAT_ALL = 0;
+    private static final int REPEAT_ONE = 1;
+    private static final int SHUFFLE = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -441,9 +442,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initRepeatAndShuffleButton(){
-        mIsRepeatAll = true;
-        mIsRepeatOne = false;
-        mIsShuffle = false;
+        mPlayState = REPEAT_ALL;
         mRepeat = findViewById(R.id.repeat_button);
         mShuffle = findViewById(R.id.shuffle_button);
         mRepeat.setBackgroundColor(getResources().getColor(R.color.color_selected));
