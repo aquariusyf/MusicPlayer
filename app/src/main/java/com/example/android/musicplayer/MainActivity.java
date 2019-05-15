@@ -447,6 +447,58 @@ public class MainActivity extends AppCompatActivity {
         mShuffle = findViewById(R.id.shuffle_button);
         mRepeat.setBackgroundColor(getResources().getColor(R.color.color_selected));
         mShuffle.setBackgroundColor(getResources().getColor(R.color.color_not_selected));
+
+        mRepeat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setRepeatState();
+            }
+        });
+
+        mShuffle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setShuffle();
+            }
+        });
+    }
+
+    private void setRepeatState(){
+        switch (mPlayState){
+            case REPEAT_ALL:
+                mPlayState = REPEAT_ONE;
+                mRepeat.setImageResource(R.drawable.repeat_one_icon);
+                break;
+            case REPEAT_ONE:
+                mPlayState = REPEAT_ALL;
+                mRepeat.setImageResource(R.drawable.repeat_all_icon);
+                break;
+            case SHUFFLE:
+                mPlayState = REPEAT_ALL;
+                mRepeat.setImageResource(R.drawable.repeat_all_icon);
+                mRepeat.setBackgroundColor(getResources().getColor(R.color.color_selected));
+                mShuffle.setBackgroundColor(getResources().getColor(R.color.color_not_selected));
+                break;
+            default: break;
+        }
+    }
+
+    private void setShuffle(){
+        switch (mPlayState){
+            case REPEAT_ALL:
+                mPlayState = SHUFFLE;
+                mRepeat.setImageResource(R.drawable.repeat_all_icon);
+                mRepeat.setBackgroundColor(getResources().getColor(R.color.color_not_selected));
+                mShuffle.setBackgroundColor(getResources().getColor(R.color.color_selected));
+                break;
+            case REPEAT_ONE:
+                mPlayState = SHUFFLE;
+                mRepeat.setImageResource(R.drawable.repeat_all_icon);
+                mRepeat.setBackgroundColor(getResources().getColor(R.color.color_not_selected));
+                mShuffle.setBackgroundColor(getResources().getColor(R.color.color_selected));
+                break;
+            default: break;
+        }
     }
 
     public MediaPlayer setMediaPlayer(MediaPlayer mediaPlayer, long songId) {
