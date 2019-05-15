@@ -9,4 +9,6 @@
     <string name="toast_next">NEXT</string>
     <string name="toast_previous">PREVIOUS</string>
     <string name="toast_no_song_found">NO SONGS FOUND</string>
+    <string name="mute">Mute</string>
+    <string name="unmute">Unmute</string>
 </resources>

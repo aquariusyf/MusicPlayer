@@ -42,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
     private AudioManager mAudioManager;
     private TextView mVolume;
     private ImageView mMute;
+    private int mPreviousVolume;
+    private boolean mIsMute;
     private ImageView mPlayButton;
     private ImageView mNextButton;
     private ImageView mPreviousButton;
@@ -323,6 +325,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void initVolumeSeekBar(){
         try{
+            mPreviousVolume = 5;
+            mIsMute = false;
             mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
             mVolumeSeekBar = findViewById(R.id.volume_seekbar);
             mMute = findViewById(R.id.mute_image_view);
@@ -334,6 +338,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                     mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, progress, 0);
                     updateVolumeText();
+                    setVolumeIcon();
                 }
 
                 @Override
@@ -346,10 +351,22 @@ public class MainActivity extends AppCompatActivity {
 
                 }
             });
+
+            mMute.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(mIsMute)
+                        setUnmute();
+                    else
+                        setMute();
+                }
+            });
+
         } catch (Exception e) {
             e.printStackTrace();
         }
         updateVolumeText();
+        setVolumeIcon();
     }
 
     @Override
@@ -370,10 +387,41 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         updateVolumeText();
+        setVolumeIcon();
         return super.onKeyDown(keyCode, event);
     }
 
+    private void setVolumeIcon(){
+        if(mVolumeSeekBar.getProgress() == 0){
+            mMute.setImageResource(R.drawable.volume_off_icon);
+            mIsMute = true;
+        }
 
+        else{
+            mMute.setImageResource(R.drawable.volume_on_icon);
+            mIsMute = false;
+        }
+    }
+
+    private void setMute(){
+        if(mIsMute)
+            return;
+        mPreviousVolume = mVolumeSeekBar.getProgress();
+        mVolumeSeekBar.setProgress(0);
+        mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 0, 0);
+        setVolumeIcon();
+        Toast.makeText(getApplicationContext(), getString(R.string.mute), Toast.LENGTH_LONG).show();
+    }
+
+    private void setUnmute(){
+        if(!mIsMute)
+            return;
+        mVolumeSeekBar.setProgress(mPreviousVolume);
+        mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, mPreviousVolume, 0);
+        setVolumeIcon();
+        mPreviousVolume = 5;
+        Toast.makeText(getApplicationContext(), getString(R.string.unmute), Toast.LENGTH_LONG).show();
+    }
 
     private void updateVolumeText(){
         String volume = new String();
