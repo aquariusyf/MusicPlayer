@@ -59,19 +59,35 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onCompletion(MediaPlayer mp) {
             releaseMediaPlayer();
-            if(mMediaIndex == mPlayList.size() - 1){
-                mMediaIndex = 0;
-                mMediaPlayer = setMediaPlayer(mMediaPlayer, mPlayList.get(mMediaIndex).getmMedia());
+            switch (mPlayState){
+                case REPEAT_ALL:
+                    if(mMediaIndex == mPlayList.size() - 1){
+                        mMediaIndex = 0;
+                        mMediaPlayer = setMediaPlayer(mMediaPlayer, mPlayList.get(mMediaIndex).getmMedia());
+                    }
+                    else{
+                        mMediaIndex++;
+                        mMediaPlayer = setMediaPlayer(mMediaPlayer, mPlayList.get(mMediaIndex).getmMedia());
+                    }
+                    mMediaPlayer.start();
+                    mMediaPlayer.setOnCompletionListener(mCompletionListener);
+                    mSeekBar.setMax(mMediaPlayer.getDuration());
+                    updateTotalTime(mMediaPlayer.getDuration());
+                    updateMarqueeText(mPlayList.get(mMediaIndex));
+                    break;
+                case REPEAT_ONE:
+                    mMediaPlayer = setMediaPlayer(mMediaPlayer, mPlayList.get(mMediaIndex).getmMedia());
+                    mMediaPlayer.start();
+                    mMediaPlayer.setOnCompletionListener(mCompletionListener);
+                    mSeekBar.setMax(mMediaPlayer.getDuration());
+                    updateTotalTime(mMediaPlayer.getDuration());
+                    updateMarqueeText(mPlayList.get(mMediaIndex));
+                    break;
+                case SHUFFLE:
+                    // Todo: implement shuffle logic
+                    break;
+                default: break;
             }
-            else{
-                mMediaIndex++;
-                mMediaPlayer = setMediaPlayer(mMediaPlayer, mPlayList.get(mMediaIndex).getmMedia());
-            }
-            mMediaPlayer.start();
-            mMediaPlayer.setOnCompletionListener(mCompletionListener);
-            mSeekBar.setMax(mMediaPlayer.getDuration());
-            updateTotalTime(mMediaPlayer.getDuration());
-            updateMarqueeText(mPlayList.get(mMediaIndex));
         }
     };
     private ImageView mRepeat;
@@ -171,23 +187,41 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v){
                 if(mMediaPlayer == null)
                     return;
-                Toast.makeText(MainActivity.this, getString(R.string.toast_next), Toast.LENGTH_SHORT).show();
                 releaseMediaPlayer();
-                if(mMediaIndex == mPlayList.size() - 1){
-                    mMediaIndex = 0;
-                    mMediaPlayer = setMediaPlayer(mMediaPlayer, mPlayList.get(mMediaIndex).getmMedia());
+                switch (mPlayState){
+                    case REPEAT_ALL:
+                        if(mMediaIndex == mPlayList.size() - 1){
+                            mMediaIndex = 0;
+                            mMediaPlayer = setMediaPlayer(mMediaPlayer, mPlayList.get(mMediaIndex).getmMedia());
+                        }
+                        else{
+                            mMediaIndex++;
+                            mMediaPlayer = setMediaPlayer(mMediaPlayer, mPlayList.get(mMediaIndex).getmMedia());
+                        }
+                        mMediaPlayer.start();
+                        mPlayButton.setImageResource(R.drawable.baseline_pause_circle_outline_white_18dp);
+                        mMediaPlayer.setOnCompletionListener(mCompletionListener);
+                        updateMarqueeText(mPlayList.get(mMediaIndex));
+                        mSeekBar.setMax(mMediaPlayer.getDuration());
+                        updateTotalTime(mMediaPlayer.getDuration());
+                        updateSeekBar();
+                        Toast.makeText(MainActivity.this, getString(R.string.toast_next), Toast.LENGTH_SHORT).show();
+                        break;
+                    case REPEAT_ONE:
+                        mMediaPlayer = setMediaPlayer(mMediaPlayer, mPlayList.get(mMediaIndex).getmMedia());
+                        mMediaPlayer.start();
+                        mPlayButton.setImageResource(R.drawable.baseline_pause_circle_outline_white_18dp);
+                        mMediaPlayer.setOnCompletionListener(mCompletionListener);
+                        updateMarqueeText(mPlayList.get(mMediaIndex));
+                        mSeekBar.setMax(mMediaPlayer.getDuration());
+                        updateTotalTime(mMediaPlayer.getDuration());
+                        updateSeekBar();
+                        break;
+                    case SHUFFLE:
+                        // Todo: implement shuffle logic
+                        break;
+                    default: break;
                 }
-                else{
-                    mMediaIndex++;
-                    mMediaPlayer = setMediaPlayer(mMediaPlayer, mPlayList.get(mMediaIndex).getmMedia());
-                }
-                mMediaPlayer.start();
-                mPlayButton.setImageResource(R.drawable.baseline_pause_circle_outline_white_18dp);
-                mMediaPlayer.setOnCompletionListener(mCompletionListener);
-                updateMarqueeText(mPlayList.get(mMediaIndex));
-                mSeekBar.setMax(mMediaPlayer.getDuration());
-                updateTotalTime(mMediaPlayer.getDuration());
-                updateSeekBar();
             }
         });
 
@@ -197,23 +231,41 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v){
                 if(mMediaPlayer == null)
                     return;
-                Toast.makeText(MainActivity.this, getString(R.string.toast_previous), Toast.LENGTH_SHORT).show();
                 releaseMediaPlayer();
-                if(mMediaIndex == 0){
-                    mMediaIndex = mPlayList.size() - 1;
-                    mMediaPlayer = setMediaPlayer(mMediaPlayer, mPlayList.get(mMediaIndex).getmMedia());
+                switch (mPlayState){
+                    case REPEAT_ALL:
+                        if(mMediaIndex == 0){
+                            mMediaIndex = mPlayList.size() - 1;
+                            mMediaPlayer = setMediaPlayer(mMediaPlayer, mPlayList.get(mMediaIndex).getmMedia());
+                        }
+                        else{
+                            mMediaIndex--;
+                            mMediaPlayer = setMediaPlayer(mMediaPlayer, mPlayList.get(mMediaIndex).getmMedia());
+                        }
+                        mMediaPlayer.start();
+                        mPlayButton.setImageResource(R.drawable.baseline_pause_circle_outline_white_18dp);
+                        mMediaPlayer.setOnCompletionListener(mCompletionListener);
+                        updateMarqueeText(mPlayList.get(mMediaIndex));
+                        mSeekBar.setMax(mMediaPlayer.getDuration());
+                        updateTotalTime(mMediaPlayer.getDuration());
+                        updateSeekBar();
+                        Toast.makeText(MainActivity.this, getString(R.string.toast_previous), Toast.LENGTH_SHORT).show();
+                        break;
+                    case REPEAT_ONE:
+                        mMediaPlayer = setMediaPlayer(mMediaPlayer, mPlayList.get(mMediaIndex).getmMedia());
+                        mMediaPlayer.start();
+                        mPlayButton.setImageResource(R.drawable.baseline_pause_circle_outline_white_18dp);
+                        mMediaPlayer.setOnCompletionListener(mCompletionListener);
+                        updateMarqueeText(mPlayList.get(mMediaIndex));
+                        mSeekBar.setMax(mMediaPlayer.getDuration());
+                        updateTotalTime(mMediaPlayer.getDuration());
+                        updateSeekBar();
+                        break;
+                    case SHUFFLE:
+                        // Todo: implement shuffle logic
+                        break;
+                    default: break;
                 }
-                else{
-                    mMediaIndex--;
-                    mMediaPlayer = setMediaPlayer(mMediaPlayer, mPlayList.get(mMediaIndex).getmMedia());
-                }
-                mMediaPlayer.start();
-                mPlayButton.setImageResource(R.drawable.baseline_pause_circle_outline_white_18dp);
-                mMediaPlayer.setOnCompletionListener(mCompletionListener);
-                updateMarqueeText(mPlayList.get(mMediaIndex));
-                mSeekBar.setMax(mMediaPlayer.getDuration());
-                updateTotalTime(mMediaPlayer.getDuration());
-                updateSeekBar();
             }
         });
 
