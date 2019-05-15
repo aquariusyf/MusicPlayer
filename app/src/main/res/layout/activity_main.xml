@@ -121,7 +121,7 @@
 
         <ImageView
             android:id="@+id/mute_image_view"
-            android:src="@drawable/baseline_volume_up_white_18dp"
+            android:src="@drawable/volume_on_icon"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
@@ -134,10 +134,11 @@
             android:layout_height="wrap_content"
             android:layout_weight="6"
             android:layout_centerInParent="true"
+            android:layout_marginTop="8dp"
             android:thumbTint="#F5F5F5"
             android:progressTint="#FFFFFF"
             android:progressBackgroundTint="#FFF8DC"
-            android:thumb="@drawable/baseline_pets_white_18dp" />
+            android:thumb="@drawable/pets_icon" />
 
         <TextView
             android:id="@+id/volume_text_view"
@@ -145,6 +146,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:layout_gravity="center_horizontal"
+            android:paddingTop="4dp"
             android:textColor="#FFFFFF"
             android:textSize="10sp"
             android:fontFamily="@font/charlotte"

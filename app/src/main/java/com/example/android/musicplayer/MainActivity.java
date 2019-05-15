@@ -373,6 +373,8 @@ public class MainActivity extends AppCompatActivity {
         return super.onKeyDown(keyCode, event);
     }
 
+
+
     private void updateVolumeText(){
         String volume = new String();
         double currentVolume = (double) mVolumeSeekBar.getProgress();
