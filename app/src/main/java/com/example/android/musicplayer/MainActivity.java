@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.media.AudioManager;
+import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Handler;
@@ -384,6 +385,26 @@ public class MainActivity extends AppCompatActivity {
         mTotalTime.setText(minute + " : " + second);
     }
 
+    private String getDuration(String rawData) {
+        int raw = Integer.parseInt(rawData);
+        raw /= 1000;
+        int min = raw / 60;
+        int sec = raw % 60;
+        String minute = Integer.toString(min);
+        String second = Integer.toString(sec);
+        if (min < 10) {
+            String temp = minute;
+            minute = "0";
+            minute += temp;
+        }
+        if (sec < 10) {
+            String temp = second;
+            second = "0";
+            second += temp;
+        }
+        return minute + " : " + second;
+    }
+
     public void loadMusic(){
         ContentResolver musicContentResolver = getContentResolver();
         Uri musicUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
@@ -404,7 +425,12 @@ public class MainActivity extends AppCompatActivity {
                 if(artistName.isEmpty() || artistName == null || artistName.equals("<unknown>")) {
                     artistName = "Unknown Artist";
                 }
-                mPlayList.add(new PlayList(songId, songName, artistName));
+                Uri songUri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, songId);
+                MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+                mmr.setDataSource(getApplicationContext(),songUri);
+                String songDurationRaw = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+                String songDuration = getDuration(songDurationRaw);
+                mPlayList.add(new PlayList(songId, songName, artistName, songDuration));
             } while(musicCursor.moveToNext());
         }
     }

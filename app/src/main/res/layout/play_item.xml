@@ -56,8 +56,8 @@
         android:layout_marginRight="16dp"
         android:layout_marginTop="23dp"
         android:gravity="right"
-        android:textColor="#70FFFFFF"
-        android:textSize="18sp"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp"
         android:textStyle="normal"
         android:fontFamily="@font/lishu"
         tools:text="05:30"/>

@@ -30,10 +30,11 @@ public class PlayItemAdapter extends ArrayAdapter<PlayList> {
 
         TextView songNameTextView = playListView.findViewById(R.id.song_name);
         TextView artistNameTextView = playListView.findViewById(R.id.artist_name);
+        TextView songDurationTextView = playListView.findViewById(R.id.song_duration);
         songNameTextView.setText(currentMedia.getmSongName());
         artistNameTextView.setText(currentMedia.getmArtistName());
-        songNameTextView.setSelected(true);
-        artistNameTextView.setSelected(true);
+        songDurationTextView.setText(currentMedia.getmMediaDuration());
+
         return playListView;
     }
 }

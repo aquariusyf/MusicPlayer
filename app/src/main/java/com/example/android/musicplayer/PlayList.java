@@ -4,11 +4,13 @@ public class PlayList {
     private long mMedia;
     private String mSongName;
     private String mArtistName;
+    private String mMediaDuration;
 
-    public PlayList(long mediaSource, String songName, String artistName){
+    public PlayList(long mediaSource, String songName, String artistName, String mediaDuration){
         this.mMedia = mediaSource;
         this.mSongName = songName;
         this.mArtistName = artistName;
+        this.mMediaDuration = mediaDuration;
     }
 
     public long getmMedia(){
@@ -20,4 +22,6 @@ public class PlayList {
     }
 
     public String getmArtistName(){ return this.mArtistName; }
+
+    public String getmMediaDuration(){ return this.mMediaDuration; }
 }
