@@ -10,14 +10,28 @@
 
     <TextView
         android:id="@+id/song_name"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:layout_margin="16dp"
-        android:gravity="center_horizontal"
+        android:gravity="left"
         android:textColor="#FFFFFF"
         android:textSize="24sp"
         android:textStyle="bold"
         android:fontFamily="@font/lishu"
         tools:text="SONG NAME" />
+
+    <TextView
+        android:id="@+id/song_duration"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_margin="16dp"
+        android:gravity="right"
+        android:textColor="#70FFFFFF"
+        android:textSize="18sp"
+        android:textStyle="normal"
+        android:fontFamily="@font/lishu"
+        tools:text="05:30"/>
 
 </LinearLayout>
