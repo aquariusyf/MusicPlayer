@@ -14,27 +14,29 @@ import java.util.ArrayList;
 
 public class PlayItemAdapter extends ArrayAdapter<PlayList> {
 
+    public View mPlayListView;
+
     public PlayItemAdapter(Activity context, ArrayList<PlayList> playList){
         super(context, 0, playList);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View playListView = convertView;
+        mPlayListView = convertView;
         if(convertView == null){
-            playListView = LayoutInflater.from(getContext()).inflate(
+            mPlayListView = LayoutInflater.from(getContext()).inflate(
                     R.layout.play_item, parent, false);
         }
 
         final PlayList currentMedia = getItem(position);
-
-        TextView songNameTextView = playListView.findViewById(R.id.song_name);
-        TextView artistNameTextView = playListView.findViewById(R.id.artist_name);
-        TextView songDurationTextView = playListView.findViewById(R.id.song_duration);
+        TextView songNameTextView = mPlayListView.findViewById(R.id.song_name);
+        TextView artistNameTextView = mPlayListView.findViewById(R.id.artist_name);
+        TextView songDurationTextView = mPlayListView.findViewById(R.id.song_duration);
+        TextView playingTextView = mPlayListView.findViewById(R.id.is_playing);
         songNameTextView.setText(currentMedia.getmSongName());
         artistNameTextView.setText(currentMedia.getmArtistName());
         songDurationTextView.setText(currentMedia.getmMediaDuration());
-
-        return playListView;
+        playingTextView.setText(currentMedia.getPlayingState());
+        return mPlayListView;
     }
 }

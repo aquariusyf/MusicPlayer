@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
     private final String LOG_TAG = MainActivity.this.getClass().getSimpleName();
     private static final int MY_PERMISSION_REQUEST = 1;
+    private ListView mListView;
     private TextView mMarqueeText;
     private TextView mTimerText;
     private SeekBar mSeekBar;
@@ -62,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
             releaseMediaPlayer();
             switch (mPlayState){
                 case REPEAT_ALL:
+                    updatePlayingItemDisplay(mMediaIndex, mMediaIndex + 1);
                     if(mMediaIndex == mPlayList.size() - 1){
                         mMediaIndex = 0;
                         mMediaPlayer = setMediaPlayer(mMediaPlayer, mPlayList.get(mMediaIndex).getmMedia());
@@ -85,7 +87,9 @@ public class MainActivity extends AppCompatActivity {
                     updateMarqueeText(mPlayList.get(mMediaIndex));
                     break;
                 case SHUFFLE:
+                    int oldIndex = mMediaIndex;
                     setShuffleIndex();
+                    updatePlayingItemDisplay(oldIndex, mMediaIndex);
                     mMediaPlayer = setMediaPlayer(mMediaPlayer, mPlayList.get(mMediaIndex).getmMedia());
                     mMediaPlayer.start();
                     mMediaPlayer.setOnCompletionListener(mCompletionListener);
@@ -133,17 +137,17 @@ public class MainActivity extends AppCompatActivity {
         mMarqueeText.setSelected(true);
         mTimerText = findViewById(R.id.timer_text_view);
         mTotalTime = findViewById(R.id.total_time_text_view);
-
         PlayItemAdapter playItemAdapter = new PlayItemAdapter(this, mPlayList);
-        ListView listView = findViewById(R.id.play_list);
-        listView.setAdapter(playItemAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mListView = findViewById(R.id.play_list);
+        mListView.setAdapter(playItemAdapter);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(mMediaPlayer != null){
                     mMediaPlayer.pause();
                     releaseMediaPlayer();
                 }
+                updatePlayingItemDisplay(mMediaIndex, position);
                 mMediaIndex = position;
                 mMediaPlayer = setMediaPlayer(mMediaPlayer, mPlayList.get(mMediaIndex).getmMedia());
                 mMediaPlayer.start();
@@ -175,6 +179,7 @@ public class MainActivity extends AppCompatActivity {
                         (mMediaPlayer != null && mMediaPlayer.getCurrentPosition() == 0)){
                     releaseMediaPlayer();
                     Toast.makeText(MainActivity.this, getString(R.string.toast_playing), Toast.LENGTH_SHORT).show();
+                    updatePlayingItemDisplay(mPlayList.size() - 1, mMediaIndex);
                     mMediaPlayer = setMediaPlayer(mMediaPlayer, mPlayList.get(mMediaIndex).getmMedia());
                     mMediaPlayer.start();
                     mPlayButton.setImageResource(R.drawable.baseline_pause_circle_outline_white_18dp);
@@ -198,6 +203,7 @@ public class MainActivity extends AppCompatActivity {
                 if(mMediaPlayer == null)
                     return;
                 releaseMediaPlayer();
+                int oldIndex = mMediaIndex;
                 switch (mPlayState){
                     case REPEAT_ALL:
                         if(mMediaIndex == mPlayList.size() - 1){
@@ -208,6 +214,7 @@ public class MainActivity extends AppCompatActivity {
                             mMediaIndex++;
                             mMediaPlayer = setMediaPlayer(mMediaPlayer, mPlayList.get(mMediaIndex).getmMedia());
                         }
+                        updatePlayingItemDisplay(oldIndex, mMediaIndex);
                         mMediaPlayer.start();
                         mPlayButton.setImageResource(R.drawable.baseline_pause_circle_outline_white_18dp);
                         mMediaPlayer.setOnCompletionListener(mCompletionListener);
@@ -229,6 +236,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case SHUFFLE:
                         setShuffleIndex();
+                        updatePlayingItemDisplay(oldIndex, mMediaIndex);
                         mMediaPlayer = setMediaPlayer(mMediaPlayer, mPlayList.get(mMediaIndex).getmMedia());
                         mMediaPlayer.start();
                         mPlayButton.setImageResource(R.drawable.baseline_pause_circle_outline_white_18dp);
@@ -250,6 +258,7 @@ public class MainActivity extends AppCompatActivity {
                 if(mMediaPlayer == null)
                     return;
                 releaseMediaPlayer();
+                int oldIndex = mMediaIndex;
                 switch (mPlayState){
                     case REPEAT_ALL:
                         if(mMediaIndex == 0){
@@ -260,6 +269,7 @@ public class MainActivity extends AppCompatActivity {
                             mMediaIndex--;
                             mMediaPlayer = setMediaPlayer(mMediaPlayer, mPlayList.get(mMediaIndex).getmMedia());
                         }
+                        updatePlayingItemDisplay(oldIndex, mMediaIndex);
                         mMediaPlayer.start();
                         mPlayButton.setImageResource(R.drawable.baseline_pause_circle_outline_white_18dp);
                         mMediaPlayer.setOnCompletionListener(mCompletionListener);
@@ -281,6 +291,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case SHUFFLE:
                         setShuffleIndex();
+                        updatePlayingItemDisplay(oldIndex, mMediaIndex);
                         mMediaPlayer = setMediaPlayer(mMediaPlayer, mPlayList.get(mMediaIndex).getmMedia());
                         mMediaPlayer.start();
                         mPlayButton.setImageResource(R.drawable.baseline_pause_circle_outline_white_18dp);
@@ -618,6 +629,26 @@ public class MainActivity extends AppCompatActivity {
             mShuffleSelector = (int) (Math.random() * mShuffleScope);
         } while(mShuffleSelector == mMediaIndex);
         mMediaIndex = mShuffleSelector;
+    }
+
+    private void updatePlayingItemDisplay(int currentPosition, int newPosition){
+        if(currentPosition == newPosition)
+            return;
+        if((currentPosition < 0 || currentPosition > mPlayList.size() - 1) ||
+                (newPosition < 0 || newPosition > mPlayList.size() - 1)){
+            Log.v(LOG_TAG, "Index Out of Bound: " + currentPosition + ", " + newPosition);
+            return;
+        }
+        mPlayList.get(currentPosition).setPlayingState("");
+        mPlayList.get(newPosition).setPlayingState(getString(R.string.playing_indicator));
+        if(currentPosition >= mListView.getFirstVisiblePosition() && currentPosition <= mListView.getLastVisiblePosition()){
+            TextView oldItemTextView = mListView.getChildAt(currentPosition - mListView.getFirstVisiblePosition()).findViewById(R.id.is_playing);
+            oldItemTextView.setText(mPlayList.get(currentPosition).getPlayingState());
+        }
+        if(newPosition >= mListView.getFirstVisiblePosition() && newPosition <= mListView.getLastVisiblePosition()){
+            TextView newItemTextView = mListView.getChildAt(newPosition - mListView.getFirstVisiblePosition()).findViewById(R.id.is_playing);
+            newItemTextView.setText(mPlayList.get(newPosition).getPlayingState());
+        }
     }
 
     public MediaPlayer setMediaPlayer(MediaPlayer mediaPlayer, long songId) {
