@@ -125,16 +125,16 @@ public class MainActivity extends AppCompatActivity {
         initRepeatAndShuffleButton();
         loadMusic();
         initShuffleSeed();
-        mSeekBar = (SeekBar)(findViewById(R.id.seekbar));
+        mSeekBar = (findViewById(R.id.seekbar));
         mSeekBar.setEnabled(false);
-        mMarqueeText = (TextView) findViewById(R.id.marquee_text);
+        mMarqueeText = findViewById(R.id.marquee_text);
         mMarqueeText.setText(getString(R.string.marquee_default));
         mMarqueeText.setSelected(true);
         mTimerText = findViewById(R.id.timer_text_view);
         mTotalTime = findViewById(R.id.total_time_text_view);
 
         PlayItemAdapter playItemAdapter = new PlayItemAdapter(this, mPlayList);
-        ListView listView = (ListView) findViewById(R.id.play_list);
+        ListView listView = findViewById(R.id.play_list);
         listView.setAdapter(playItemAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -400,7 +400,11 @@ public class MainActivity extends AppCompatActivity {
             do{
                 long songId = musicCursor.getLong(musicCursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID));
                 String songName = musicCursor.getString(musicCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE));
-                mPlayList.add(new PlayList(songId, songName));
+                String artistName = musicCursor.getString(musicCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST));
+                if(artistName.isEmpty() || artistName == null || artistName.equals("<unknown>")) {
+                    artistName = "Unknown Artist";
+                }
+                mPlayList.add(new PlayList(songId, songName, artistName));
             } while(musicCursor.moveToNext());
         }
     }
