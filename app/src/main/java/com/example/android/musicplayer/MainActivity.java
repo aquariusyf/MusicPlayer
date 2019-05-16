@@ -84,7 +84,13 @@ public class MainActivity extends AppCompatActivity {
                     updateMarqueeText(mPlayList.get(mMediaIndex));
                     break;
                 case SHUFFLE:
-                    // Todo: implement shuffle logic
+                    setShuffleIndex();
+                    mMediaPlayer = setMediaPlayer(mMediaPlayer, mPlayList.get(mMediaIndex).getmMedia());
+                    mMediaPlayer.start();
+                    mMediaPlayer.setOnCompletionListener(mCompletionListener);
+                    mSeekBar.setMax(mMediaPlayer.getDuration());
+                    updateTotalTime(mMediaPlayer.getDuration());
+                    updateMarqueeText(mPlayList.get(mMediaIndex));
                     break;
                 default: break;
             }
@@ -96,6 +102,8 @@ public class MainActivity extends AppCompatActivity {
     private static final int REPEAT_ALL = 0;
     private static final int REPEAT_ONE = 1;
     private static final int SHUFFLE = 2;
+    private int mShuffleScope;
+    private int mShuffleSelector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
         initVolumeSeekBar();
         initRepeatAndShuffleButton();
         loadMusic();
+        initShuffleSeed();
         mSeekBar = (SeekBar)(findViewById(R.id.seekbar));
         mSeekBar.setEnabled(false);
         mMarqueeText = (TextView) findViewById(R.id.marquee_text);
@@ -218,7 +227,15 @@ public class MainActivity extends AppCompatActivity {
                         updateSeekBar();
                         break;
                     case SHUFFLE:
-                        // Todo: implement shuffle logic
+                        setShuffleIndex();
+                        mMediaPlayer = setMediaPlayer(mMediaPlayer, mPlayList.get(mMediaIndex).getmMedia());
+                        mMediaPlayer.start();
+                        mPlayButton.setImageResource(R.drawable.baseline_pause_circle_outline_white_18dp);
+                        mMediaPlayer.setOnCompletionListener(mCompletionListener);
+                        updateMarqueeText(mPlayList.get(mMediaIndex));
+                        mSeekBar.setMax(mMediaPlayer.getDuration());
+                        updateTotalTime(mMediaPlayer.getDuration());
+                        updateSeekBar();
                         break;
                     default: break;
                 }
@@ -262,7 +279,15 @@ public class MainActivity extends AppCompatActivity {
                         updateSeekBar();
                         break;
                     case SHUFFLE:
-                        // Todo: implement shuffle logic
+                        setShuffleIndex();
+                        mMediaPlayer = setMediaPlayer(mMediaPlayer, mPlayList.get(mMediaIndex).getmMedia());
+                        mMediaPlayer.start();
+                        mPlayButton.setImageResource(R.drawable.baseline_pause_circle_outline_white_18dp);
+                        mMediaPlayer.setOnCompletionListener(mCompletionListener);
+                        updateMarqueeText(mPlayList.get(mMediaIndex));
+                        mSeekBar.setMax(mMediaPlayer.getDuration());
+                        updateTotalTime(mMediaPlayer.getDuration());
+                        updateSeekBar();
                         break;
                     default: break;
                 }
@@ -551,6 +576,18 @@ public class MainActivity extends AppCompatActivity {
                 break;
             default: break;
         }
+    }
+
+    private void initShuffleSeed(){
+        mShuffleScope = mPlayList.size();
+        mShuffleSelector = mShuffleScope/2;
+    }
+
+    private void setShuffleIndex(){
+        do{
+            mShuffleSelector = (int) (Math.random() * mShuffleScope);
+        } while(mShuffleSelector == mMediaIndex);
+        mMediaIndex = mShuffleSelector;
     }
 
     public MediaPlayer setMediaPlayer(MediaPlayer mediaPlayer, long songId) {
