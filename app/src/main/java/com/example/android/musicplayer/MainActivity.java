@@ -6,6 +6,8 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
@@ -441,7 +443,11 @@ public class MainActivity extends AppCompatActivity {
                 mmr.setDataSource(getApplicationContext(),songUri);
                 String songDurationRaw = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
                 String songDuration = getDuration(songDurationRaw);
-                mPlayList.add(new PlayList(songId, songName, artistName, songDuration));
+                byte[] albumImageRawData = mmr.getEmbeddedPicture();
+                Bitmap albumImageBitmap = null;
+                if(albumImageRawData != null)
+                    albumImageBitmap = BitmapFactory.decodeByteArray(albumImageRawData, 0, albumImageRawData.length);
+                mPlayList.add(new PlayList(songId, songName, artistName, songDuration, albumImageBitmap));
             } while(musicCursor.moveToNext());
         }
     }

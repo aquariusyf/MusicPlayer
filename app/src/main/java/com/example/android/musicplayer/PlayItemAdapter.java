@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
@@ -33,10 +34,22 @@ public class PlayItemAdapter extends ArrayAdapter<PlayList> {
         TextView artistNameTextView = mPlayListView.findViewById(R.id.artist_name);
         TextView songDurationTextView = mPlayListView.findViewById(R.id.song_duration);
         TextView playingTextView = mPlayListView.findViewById(R.id.is_playing);
+        ImageView albumImageView = mPlayListView.findViewById(R.id.album_image);
         songNameTextView.setText(currentMedia.getmSongName());
         artistNameTextView.setText(currentMedia.getmArtistName());
         songDurationTextView.setText(currentMedia.getmMediaDuration());
         playingTextView.setText(currentMedia.getPlayingState());
+        if(currentMedia.getAlbumBitMap() != null){
+            albumImageView.setImageBitmap(currentMedia.getAlbumBitMap());
+            albumImageView.setScaleX(1.0f);
+            albumImageView.setScaleY(1.0f);
+        }
+        else{
+            albumImageView.setImageResource(R.mipmap.default_album_icon);
+            albumImageView.setScaleX(1.26f);
+            albumImageView.setScaleY(1.2f);
+        }
+        albumImageView.setScaleType(ImageView.ScaleType.FIT_XY);
         return mPlayListView;
     }
 }
