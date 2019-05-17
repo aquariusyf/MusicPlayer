@@ -85,12 +85,13 @@
 
         <ImageView
             android:src="@drawable/repeat_all_icon"
+            android:background="@drawable/round_shape_selected"
             android:id="@+id/repeat_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_alignParentLeft="true"
-            android:layout_margin="16dp"/>
+            android:layout_margin="16dp" />
 
         <ImageView
             android:src="@drawable/baseline_skip_previous_white_18dp"
@@ -121,6 +122,7 @@
 
         <ImageView
             android:src="@drawable/shuffle_icon"
+            android:background="@drawable/round_shape_selected"
             android:id="@+id/shuffle_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

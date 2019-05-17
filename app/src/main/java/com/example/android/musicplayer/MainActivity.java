@@ -569,8 +569,8 @@ public class MainActivity extends AppCompatActivity {
         mPlayState = REPEAT_ALL;
         mRepeat = findViewById(R.id.repeat_button);
         mShuffle = findViewById(R.id.shuffle_button);
-        mRepeat.setBackgroundColor(getResources().getColor(R.color.color_selected));
-        mShuffle.setBackgroundColor(getResources().getColor(R.color.color_not_selected));
+        mRepeat.setBackgroundResource(R.drawable.round_shape_selected);
+        mShuffle.setBackgroundResource(R.drawable.round_shape_not_selected);
 
         mRepeat.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -600,8 +600,8 @@ public class MainActivity extends AppCompatActivity {
             case SHUFFLE:
                 mPlayState = REPEAT_ALL;
                 mRepeat.setImageResource(R.drawable.repeat_all_icon);
-                mRepeat.setBackgroundColor(getResources().getColor(R.color.color_selected));
-                mShuffle.setBackgroundColor(getResources().getColor(R.color.color_not_selected));
+                mRepeat.setBackgroundResource(R.drawable.round_shape_selected);
+                mShuffle.setBackgroundResource(R.drawable.round_shape_not_selected);
                 break;
             default: break;
         }
@@ -612,14 +612,14 @@ public class MainActivity extends AppCompatActivity {
             case REPEAT_ALL:
                 mPlayState = SHUFFLE;
                 mRepeat.setImageResource(R.drawable.repeat_all_icon);
-                mRepeat.setBackgroundColor(getResources().getColor(R.color.color_not_selected));
-                mShuffle.setBackgroundColor(getResources().getColor(R.color.color_selected));
+                mRepeat.setBackgroundResource(R.drawable.round_shape_not_selected);
+                mShuffle.setBackgroundResource(R.drawable.round_shape_selected);
                 break;
             case REPEAT_ONE:
                 mPlayState = SHUFFLE;
                 mRepeat.setImageResource(R.drawable.repeat_all_icon);
-                mRepeat.setBackgroundColor(getResources().getColor(R.color.color_not_selected));
-                mShuffle.setBackgroundColor(getResources().getColor(R.color.color_selected));
+                mRepeat.setBackgroundResource(R.drawable.round_shape_not_selected);
+                mShuffle.setBackgroundResource(R.drawable.round_shape_selected);
                 break;
             default: break;
         }
