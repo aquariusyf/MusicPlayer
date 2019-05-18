@@ -1,6 +1,7 @@
 package com.example.android.musicplayer;
 
 import android.Manifest;
+import android.app.ActionBar;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
@@ -17,6 +18,7 @@ import android.os.PersistableBundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
@@ -32,6 +34,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SeekBar;
+import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -121,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
 
     private List<Fragment> mFragmentList;
     private ViewPager mFragmentContainer;
+    private TabLayout mTab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -457,6 +461,8 @@ public class MainActivity extends AppCompatActivity {
                 Bitmap albumImageBitmap = null;
                 if(albumImageRawData != null)
                     albumImageBitmap = BitmapFactory.decodeByteArray(albumImageRawData, 0, albumImageRawData.length);
+                else
+                    albumImageBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.default_album_icon);
                 mPlayList.add(new PlayList(songId, songName, artistName, songDuration, albumImageBitmap));
             } while(musicCursor.moveToNext());
         }
@@ -673,6 +679,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void initFragmentList(){
         mFragmentContainer = findViewById(R.id.vp_fragment_list_container);
+        mTab = findViewById(R.id.vp_tab_dots);
+        mTab.setupWithViewPager(mFragmentContainer,false);
         CurrentMediaFragment currentMediaFragment = new CurrentMediaFragment();
         MediaListFragment mediaListFragment = new MediaListFragment();
         mFragmentList = new ArrayList<>();
