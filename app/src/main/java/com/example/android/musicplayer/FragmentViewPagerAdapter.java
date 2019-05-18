@@ -1,8 +1,12 @@
 package com.example.android.musicplayer;
 
+import android.graphics.Bitmap;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.widget.ImageView;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class FragmentViewPagerAdapter extends FragmentPagerAdapter {

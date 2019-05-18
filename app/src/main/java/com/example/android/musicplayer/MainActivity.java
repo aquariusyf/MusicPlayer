@@ -656,6 +656,7 @@ public class MainActivity extends AppCompatActivity {
         mPlayList.get(currentPosition).setPlayingState("");
         mPlayList.get(newPosition).setPlayingState(getString(R.string.playing_indicator));
         MediaListFragment.updateText(currentPosition, newPosition, mPlayList);
+        CurrentMediaFragment.updateAlbumDisplay(newPosition, mPlayList);
     }
 
     public MediaPlayer setMediaPlayer(MediaPlayer mediaPlayer, long songId) {
