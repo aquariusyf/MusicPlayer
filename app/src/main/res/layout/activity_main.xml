@@ -64,8 +64,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="10"
             android:layout_centerInParent="true"
-            android:thumbTint="#F5F5F5"
-            android:progressTint="#FFFFFF"
+            android:thumbTint="#DC2181"
+            android:progressTint="#DC2181"
             android:progressBackgroundTint="#FFF8DC"
             android:thumb="@drawable/baseline_audiotrack_white_18dp" />
 
@@ -163,8 +163,8 @@
             android:layout_weight="6"
             android:layout_centerInParent="true"
             android:layout_marginTop="8dp"
-            android:thumbTint="#F5F5F5"
-            android:progressTint="#FFFFFF"
+            android:thumbTint="#DC2181"
+            android:progressTint="#DC2181"
             android:progressBackgroundTint="#FFF8DC"
             android:thumb="@drawable/pets_icon" />
 
