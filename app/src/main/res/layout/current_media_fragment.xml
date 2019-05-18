@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/current_media_fragment_layout">
+
+    <ImageView
+        android:src="@mipmap/default_album_icon"
+        android:id="@+id/current_media_fragment_image"
+        android:layout_width="240dp"
+        android:layout_height="240dp"
+        android:layout_gravity="center"/>
+
+</LinearLayout>

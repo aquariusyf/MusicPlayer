@@ -7,14 +7,12 @@
     android:orientation="vertical"
     android:background="@drawable/dark_star_background">
 
-    <ListView
+    <android.support.v4.view.ViewPager
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/vp_fragment_list_container"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:id="@+id/play_list"
-        android:orientation="vertical"
-        android:layout_margin="16dp">
-
-    </ListView>
+        android:layout_height="240dp"
+        android:layout_margin="8dp"/>
 
     <TextView
         android:id="@+id/marquee_text"

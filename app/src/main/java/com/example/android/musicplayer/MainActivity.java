@@ -13,9 +13,16 @@ import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Handler;
+import android.os.PersistableBundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,12 +37,12 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     private final String LOG_TAG = MainActivity.this.getClass().getSimpleName();
     private static final int MY_PERMISSION_REQUEST = 1;
-    private ListView mListView;
     private TextView mMarqueeText;
     private TextView mTimerText;
     private SeekBar mSeekBar;
@@ -112,6 +119,9 @@ public class MainActivity extends AppCompatActivity {
     private int mShuffleScope;
     private int mShuffleSelector;
 
+    private List<Fragment> mFragmentList;
+    private ViewPager mFragmentContainer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -127,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
                         new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, MY_PERMISSION_REQUEST);
             }
         }
+        initFragmentList();
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
         initVolumeSeekBar();
         initRepeatAndShuffleButton();
@@ -139,10 +150,8 @@ public class MainActivity extends AppCompatActivity {
         mMarqueeText.setSelected(true);
         mTimerText = findViewById(R.id.timer_text_view);
         mTotalTime = findViewById(R.id.total_time_text_view);
-        PlayItemAdapter playItemAdapter = new PlayItemAdapter(this, mPlayList);
-        mListView = findViewById(R.id.play_list);
-        mListView.setAdapter(playItemAdapter);
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        MediaListFragment.initAdapter(mPlayList, this);
+        AdapterView.OnItemClickListener listener = new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(mMediaPlayer != null){
@@ -160,7 +169,8 @@ public class MainActivity extends AppCompatActivity {
                 updateTotalTime(mMediaPlayer.getDuration());
                 updateSeekBar();
             }
-        });
+        };
+        MediaListFragment.setListener(listener);
 
         mPlayButton = findViewById(R.id.play_btn);
         mPlayButton.setOnClickListener(new View.OnClickListener(){
@@ -647,14 +657,7 @@ public class MainActivity extends AppCompatActivity {
         }
         mPlayList.get(currentPosition).setPlayingState("");
         mPlayList.get(newPosition).setPlayingState(getString(R.string.playing_indicator));
-        if(currentPosition >= mListView.getFirstVisiblePosition() && currentPosition <= mListView.getLastVisiblePosition()){
-            TextView oldItemTextView = mListView.getChildAt(currentPosition - mListView.getFirstVisiblePosition()).findViewById(R.id.is_playing);
-            oldItemTextView.setText(mPlayList.get(currentPosition).getPlayingState());
-        }
-        if(newPosition >= mListView.getFirstVisiblePosition() && newPosition <= mListView.getLastVisiblePosition()){
-            TextView newItemTextView = mListView.getChildAt(newPosition - mListView.getFirstVisiblePosition()).findViewById(R.id.is_playing);
-            newItemTextView.setText(mPlayList.get(newPosition).getPlayingState());
-        }
+        MediaListFragment.updateText(currentPosition, newPosition, mPlayList);
     }
 
     public MediaPlayer setMediaPlayer(MediaPlayer mediaPlayer, long songId) {
@@ -667,6 +670,16 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return mediaPlayer;
+    }
+
+    private void initFragmentList(){
+        mFragmentContainer = findViewById(R.id.vp_fragment_list_container);
+        CurrentMediaFragment currentMediaFragment = new CurrentMediaFragment();
+        MediaListFragment mediaListFragment = new MediaListFragment();
+        mFragmentList = new ArrayList<>();
+        mFragmentList.add(mediaListFragment);
+        mFragmentList.add(currentMediaFragment);
+        mFragmentContainer.setAdapter(new FragmentViewPagerAdapter(getSupportFragmentManager(), mFragmentList));
     }
 }
 
