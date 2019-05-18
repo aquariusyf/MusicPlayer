@@ -109,12 +109,14 @@
             android:layout_margin="16dp"/>
 
         <ImageView
-            android:src="@drawable/baseline_play_circle_outline_white_18dp"
+            android:src="@mipmap/play_button_icon"
             android:id="@+id/play_btn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="3"
-            android:layout_margin="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="10dp"
             android:layout_alignParentTop="true" />
 
         <ImageView

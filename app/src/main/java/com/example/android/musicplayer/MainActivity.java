@@ -166,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
                 mMediaIndex = position;
                 mMediaPlayer = setMediaPlayer(mMediaPlayer, mPlayList.get(mMediaIndex).getmMedia());
                 mMediaPlayer.start();
-                mPlayButton.setImageResource(R.drawable.baseline_pause_circle_outline_white_18dp);
+                mPlayButton.setImageResource(R.mipmap.pause_button_icon);
                 mMediaPlayer.setOnCompletionListener(mCompletionListener);
                 updateMarqueeText(mPlayList.get(mMediaIndex));
                 mSeekBar.setMax(mMediaPlayer.getDuration());
@@ -182,13 +182,13 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v){
                 if(mMediaPlayer != null && mMediaPlayer.isPlaying()){
                     mMediaPlayer.pause();
-                    mPlayButton.setImageResource(R.drawable.baseline_play_circle_outline_white_18dp);
+                    mPlayButton.setImageResource(R.mipmap.play_button_icon);
                     Toast.makeText(MainActivity.this, getString(R.string.toast_pause), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if(mMediaPlayer != null && mMediaPlayer.getCurrentPosition() != 0) {
                     mMediaPlayer.start();
-                    mPlayButton.setImageResource(R.drawable.baseline_pause_circle_outline_white_18dp);
+                    mPlayButton.setImageResource(R.mipmap.pause_button_icon);
                     Toast.makeText(MainActivity.this, getString(R.string.toast_continue), Toast.LENGTH_SHORT).show();
                 }
                 else if((mMediaPlayer == null && !mPlayList.isEmpty()) ||
@@ -198,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
                     updatePlayingItemDisplay(mPlayList.size() - 1, mMediaIndex);
                     mMediaPlayer = setMediaPlayer(mMediaPlayer, mPlayList.get(mMediaIndex).getmMedia());
                     mMediaPlayer.start();
-                    mPlayButton.setImageResource(R.drawable.baseline_pause_circle_outline_white_18dp);
+                    mPlayButton.setImageResource(R.mipmap.pause_button_icon);
                     Log.v(LOG_TAG, "Start Playing!!!" + mPlayList.get(mMediaIndex).getmSongName());
                     mMediaPlayer.setOnCompletionListener(mCompletionListener);
                     updateMarqueeText(mPlayList.get(mMediaIndex));
@@ -232,7 +232,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                         updatePlayingItemDisplay(oldIndex, mMediaIndex);
                         mMediaPlayer.start();
-                        mPlayButton.setImageResource(R.drawable.baseline_pause_circle_outline_white_18dp);
+                        mPlayButton.setImageResource(R.mipmap.pause_button_icon);
                         mMediaPlayer.setOnCompletionListener(mCompletionListener);
                         updateMarqueeText(mPlayList.get(mMediaIndex));
                         mSeekBar.setMax(mMediaPlayer.getDuration());
@@ -243,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
                     case REPEAT_ONE:
                         mMediaPlayer = setMediaPlayer(mMediaPlayer, mPlayList.get(mMediaIndex).getmMedia());
                         mMediaPlayer.start();
-                        mPlayButton.setImageResource(R.drawable.baseline_pause_circle_outline_white_18dp);
+                        mPlayButton.setImageResource(R.mipmap.pause_button_icon);
                         mMediaPlayer.setOnCompletionListener(mCompletionListener);
                         updateMarqueeText(mPlayList.get(mMediaIndex));
                         mSeekBar.setMax(mMediaPlayer.getDuration());
@@ -255,7 +255,7 @@ public class MainActivity extends AppCompatActivity {
                         updatePlayingItemDisplay(oldIndex, mMediaIndex);
                         mMediaPlayer = setMediaPlayer(mMediaPlayer, mPlayList.get(mMediaIndex).getmMedia());
                         mMediaPlayer.start();
-                        mPlayButton.setImageResource(R.drawable.baseline_pause_circle_outline_white_18dp);
+                        mPlayButton.setImageResource(R.mipmap.pause_button_icon);
                         mMediaPlayer.setOnCompletionListener(mCompletionListener);
                         updateMarqueeText(mPlayList.get(mMediaIndex));
                         mSeekBar.setMax(mMediaPlayer.getDuration());
@@ -287,7 +287,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                         updatePlayingItemDisplay(oldIndex, mMediaIndex);
                         mMediaPlayer.start();
-                        mPlayButton.setImageResource(R.drawable.baseline_pause_circle_outline_white_18dp);
+                        mPlayButton.setImageResource(R.mipmap.pause_button_icon);
                         mMediaPlayer.setOnCompletionListener(mCompletionListener);
                         updateMarqueeText(mPlayList.get(mMediaIndex));
                         mSeekBar.setMax(mMediaPlayer.getDuration());
@@ -298,7 +298,7 @@ public class MainActivity extends AppCompatActivity {
                     case REPEAT_ONE:
                         mMediaPlayer = setMediaPlayer(mMediaPlayer, mPlayList.get(mMediaIndex).getmMedia());
                         mMediaPlayer.start();
-                        mPlayButton.setImageResource(R.drawable.baseline_pause_circle_outline_white_18dp);
+                        mPlayButton.setImageResource(R.mipmap.pause_button_icon);
                         mMediaPlayer.setOnCompletionListener(mCompletionListener);
                         updateMarqueeText(mPlayList.get(mMediaIndex));
                         mSeekBar.setMax(mMediaPlayer.getDuration());
@@ -310,7 +310,7 @@ public class MainActivity extends AppCompatActivity {
                         updatePlayingItemDisplay(oldIndex, mMediaIndex);
                         mMediaPlayer = setMediaPlayer(mMediaPlayer, mPlayList.get(mMediaIndex).getmMedia());
                         mMediaPlayer.start();
-                        mPlayButton.setImageResource(R.drawable.baseline_pause_circle_outline_white_18dp);
+                        mPlayButton.setImageResource(R.mipmap.pause_button_icon);
                         mMediaPlayer.setOnCompletionListener(mCompletionListener);
                         updateMarqueeText(mPlayList.get(mMediaIndex));
                         mSeekBar.setMax(mMediaPlayer.getDuration());
@@ -346,7 +346,7 @@ public class MainActivity extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {
                 if(mMediaPlayer != null){
                     mMediaPlayer.start();
-                    mPlayButton.setImageResource(R.drawable.baseline_pause_circle_outline_white_18dp);
+                    mPlayButton.setImageResource(R.mipmap.pause_button_icon);
                 }
             }
         });
