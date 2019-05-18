@@ -648,8 +648,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updatePlayingItemDisplay(int currentPosition, int newPosition){
-        if(currentPosition == newPosition)
-            return;
         if((currentPosition < 0 || currentPosition > mPlayList.size() - 1) ||
                 (newPosition < 0 || newPosition > mPlayList.size() - 1)){
             Log.v(LOG_TAG, "Index Out of Bound: " + currentPosition + ", " + newPosition);
