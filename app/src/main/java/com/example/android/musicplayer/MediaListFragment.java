@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -44,6 +45,8 @@ public class MediaListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         mListView = view.findViewById(R.id.play_list_fragment_layout);
+        LinearLayout emptyLayout = view.findViewById(R.id.empty_view);
+        mListView.setEmptyView(emptyLayout);
         mListView.setAdapter(mPlayItemAdapter);
         mListView.setOnItemClickListener(getListener());
         super.onViewCreated(view, savedInstanceState);
