@@ -53,8 +53,15 @@ public class MediaListFragment extends Fragment {
         mPlayItemAdapter = new PlayItemAdapter(context, playList);
     }
 
-    public static ListView getListView(){
-        return mListView;
+    public static void updateAdapter(ArrayList<PlayList> playList){
+        mPlayItemAdapter.clear();
+        if(playList != null && !playList.isEmpty()){
+            mPlayItemAdapter.addAll(playList);
+        }
+    }
+
+    public static void resetAdapter(){
+        mPlayItemAdapter.clear();
     }
 
     public static AdapterView.OnItemClickListener getListener(){

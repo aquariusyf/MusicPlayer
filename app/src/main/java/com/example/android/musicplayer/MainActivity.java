@@ -1,7 +1,7 @@
 package com.example.android.musicplayer;
 
 import android.Manifest;
-import android.app.ActionBar;
+import android.app.LoaderManager;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
@@ -14,16 +14,13 @@ import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Handler;
-import android.os.PersistableBundle;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.ListFragment;
+import android.app.LoaderManager.LoaderCallbacks;
+import android.content.Loader;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -32,9 +29,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.SeekBar;
-import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,10 +37,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements LoaderCallbacks<ArrayList<PlayList>> {
 
     private final String LOG_TAG = MainActivity.this.getClass().getSimpleName();
     private static final int MY_PERMISSION_REQUEST = 1;
+    private static final int MEDIA_LOADER_ID = 1;
     private TextView mTimerText;
     private SeekBar mSeekBar;
     private TextView mTotalTime;
@@ -144,7 +140,6 @@ public class MainActivity extends AppCompatActivity {
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
         initVolumeSeekBar();
         initRepeatAndShuffleButton();
-        loadMusic();
         initShuffleSeed();
         mSeekBar = (findViewById(R.id.seekbar));
         mSeekBar.setEnabled(false);
@@ -171,6 +166,8 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         MediaListFragment.setListener(listener);
+        LoaderManager loaderManager = getLoaderManager();
+        loaderManager.initLoader(MEDIA_LOADER_ID, null, this);
 
         mPlayButton = findViewById(R.id.play_btn);
         mPlayButton.setOnClickListener(new View.OnClickListener(){
@@ -427,42 +424,6 @@ public class MainActivity extends AppCompatActivity {
         return minute + " : " + second;
     }
 
-    public void loadMusic(){
-        ContentResolver musicContentResolver = getContentResolver();
-        Uri musicUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        Cursor musicCursor = musicContentResolver.query(musicUri, null, null, null, null);
-        if(musicCursor == null){
-            Toast.makeText(getApplicationContext(), getString(R.string.load_music_failed), Toast.LENGTH_LONG).show();
-            return;
-        }
-        else if(!musicCursor.moveToFirst()){
-            Toast.makeText(getApplicationContext(), getString(R.string.toast_no_song_found), Toast.LENGTH_LONG).show();
-            return;
-        }
-        else{
-            do{
-                long songId = musicCursor.getLong(musicCursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID));
-                String songName = musicCursor.getString(musicCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE));
-                String artistName = musicCursor.getString(musicCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST));
-                if(artistName.isEmpty() || artistName == null || artistName.equals("<unknown>")) {
-                    artistName = "Unknown Artist";
-                }
-                Uri songUri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, songId);
-                MediaMetadataRetriever mmr = new MediaMetadataRetriever();
-                mmr.setDataSource(getApplicationContext(),songUri);
-                String songDurationRaw = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
-                String songDuration = getDuration(songDurationRaw);
-                byte[] albumImageRawData = mmr.getEmbeddedPicture();
-                Bitmap albumImageBitmap = null;
-                if(albumImageRawData != null)
-                    albumImageBitmap = BitmapFactory.decodeByteArray(albumImageRawData, 0, albumImageRawData.length);
-                else
-                    albumImageBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.default_album_icon);
-                mPlayList.add(new PlayList(songId, songName, artistName, songDuration, albumImageBitmap));
-            } while(musicCursor.moveToNext());
-        }
-    }
-
     private void initVolumeSeekBar(){
         try{
             mPreviousVolume = 5;
@@ -674,6 +635,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initFragmentList(){
         mFragmentContainer = findViewById(R.id.vp_fragment_list_container);
+        mFragmentContainer.setPageTransformer(true, new ZoomOutPageTransformer());
         mTab = findViewById(R.id.vp_tab_dots);
         mTab.setupWithViewPager(mFragmentContainer,false);
         CurrentMediaFragment currentMediaFragment = new CurrentMediaFragment();
@@ -683,5 +645,24 @@ public class MainActivity extends AppCompatActivity {
         mFragmentList.add(currentMediaFragment);
         mFragmentContainer.setAdapter(new FragmentViewPagerAdapter(getSupportFragmentManager(), mFragmentList));
     }
+
+    @Override
+    public Loader<ArrayList<PlayList>> onCreateLoader(int i, Bundle bundle) {
+        return new MediaLoader(this, MediaStore.Audio.Media.EXTERNAL_CONTENT_URI);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<ArrayList<PlayList>> loader, ArrayList<PlayList> playlist) {
+        if(playlist == null || playlist.isEmpty())
+            return;
+        mPlayList = playlist;
+        MediaListFragment.updateAdapter(playlist);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<ArrayList<PlayList>> loader) {
+        MediaListFragment.resetAdapter();
+    }
+
 }
 
