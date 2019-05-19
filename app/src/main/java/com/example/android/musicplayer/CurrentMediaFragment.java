@@ -9,12 +9,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
 public class CurrentMediaFragment extends Fragment {
 
     public static ImageView mAlbumImageView;
+    public static TextView mMediaNameTextView;
 
     public CurrentMediaFragment() {
         // Required empty public constructor
@@ -35,6 +37,7 @@ public class CurrentMediaFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         mAlbumImageView = view.findViewById(R.id.current_media_fragment_image);
+        mMediaNameTextView = view.findViewById(R.id.current_media_name);
         super.onViewCreated(view, savedInstanceState);
     }
 
@@ -43,4 +46,9 @@ public class CurrentMediaFragment extends Fragment {
         mAlbumImageView.setImageBitmap(newAlbumImage);
     }
 
+    public static void updateMediaName(PlayList playList){
+        String mediaName = playList.getmSongName();
+        mMediaNameTextView.setText(mediaName);
+        mMediaNameTextView.setSelected(true);
+    }
 }

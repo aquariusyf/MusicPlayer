@@ -46,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
 
     private final String LOG_TAG = MainActivity.this.getClass().getSimpleName();
     private static final int MY_PERMISSION_REQUEST = 1;
-    private TextView mMarqueeText;
     private TextView mTimerText;
     private SeekBar mSeekBar;
     private TextView mTotalTime;
@@ -149,9 +148,6 @@ public class MainActivity extends AppCompatActivity {
         initShuffleSeed();
         mSeekBar = (findViewById(R.id.seekbar));
         mSeekBar.setEnabled(false);
-        mMarqueeText = findViewById(R.id.marquee_text);
-        mMarqueeText.setText(getString(R.string.marquee_default));
-        mMarqueeText.setSelected(true);
         mTimerText = findViewById(R.id.timer_text_view);
         mTotalTime = findViewById(R.id.total_time_text_view);
         MediaListFragment.initAdapter(mPlayList, this);
@@ -360,8 +356,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateMarqueeText(PlayList playItem){
-        String str = playItem.getmSongName();
-        mMarqueeText.setText(str + "          ");
+        CurrentMediaFragment.updateMediaName(playItem);
         updateTimer(mMediaPlayer.getCurrentPosition());
     }
 
