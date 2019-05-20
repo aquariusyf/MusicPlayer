@@ -140,7 +140,6 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<A
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
         initVolumeSeekBar();
         initRepeatAndShuffleButton();
-        initShuffleSeed();
         mSeekBar = (findViewById(R.id.seekbar));
         mSeekBar.setEnabled(false);
         mTimerText = findViewById(R.id.timer_text_view);
@@ -213,6 +212,8 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<A
                     return;
                 releaseMediaPlayer();
                 int oldIndex = mMediaIndex;
+                Log.v(LOG_TAG, "Old Index: " + oldIndex);
+                Log.v(LOG_TAG, "Play State: " + mPlayState);
                 switch (mPlayState){
                     case REPEAT_ALL:
                         if(mMediaIndex == mPlayList.size() - 1){
@@ -245,9 +246,11 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<A
                         break;
                     case SHUFFLE:
                         setShuffleIndex();
+                        Log.v(LOG_TAG, "New Index: " + mMediaIndex);
                         updatePlayingItemDisplay(oldIndex, mMediaIndex);
                         mMediaPlayer = setMediaPlayer(mMediaPlayer, mPlayList.get(mMediaIndex).getmMedia());
                         mMediaPlayer.start();
+                        Log.v(LOG_TAG, "Media started");
                         mPlayButton.setImageResource(R.mipmap.pause_button_icon);
                         mMediaPlayer.setOnCompletionListener(mCompletionListener);
                         updateMarqueeText(mPlayList.get(mMediaIndex));
@@ -541,8 +544,6 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<A
         mPlayState = REPEAT_ALL;
         mRepeat = findViewById(R.id.repeat_button);
         mShuffle = findViewById(R.id.shuffle_button);
-        mRepeat.setBackgroundResource(R.drawable.round_shape_selected);
-        mShuffle.setBackgroundResource(R.drawable.round_shape_not_selected);
 
         mRepeat.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -550,7 +551,6 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<A
                 setRepeatState();
             }
         });
-
         mShuffle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -563,17 +563,16 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<A
         switch (mPlayState){
             case REPEAT_ALL:
                 mPlayState = REPEAT_ONE;
-                mRepeat.setImageResource(R.drawable.repeat_one_icon);
+                mRepeat.setImageResource(R.mipmap.repeat_one_selected_icon);
                 break;
             case REPEAT_ONE:
                 mPlayState = REPEAT_ALL;
-                mRepeat.setImageResource(R.drawable.repeat_all_icon);
+                mRepeat.setImageResource(R.mipmap.repeat_all_selected_icon);
                 break;
             case SHUFFLE:
                 mPlayState = REPEAT_ALL;
-                mRepeat.setImageResource(R.drawable.repeat_all_icon);
-                mRepeat.setBackgroundResource(R.drawable.round_shape_selected);
-                mShuffle.setBackgroundResource(R.drawable.round_shape_not_selected);
+                mRepeat.setImageResource(R.mipmap.repeat_all_selected_icon);
+                mShuffle.setImageResource(R.mipmap.shuffle_not_selected_icon);
                 break;
             default: break;
         }
@@ -583,15 +582,13 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<A
         switch (mPlayState){
             case REPEAT_ALL:
                 mPlayState = SHUFFLE;
-                mRepeat.setImageResource(R.drawable.repeat_all_icon);
-                mRepeat.setBackgroundResource(R.drawable.round_shape_not_selected);
-                mShuffle.setBackgroundResource(R.drawable.round_shape_selected);
+                mRepeat.setImageResource(R.mipmap.repeat_all_not_selected_icon);
+                mShuffle.setImageResource(R.mipmap.shuffle_selected_icon);
                 break;
             case REPEAT_ONE:
                 mPlayState = SHUFFLE;
-                mRepeat.setImageResource(R.drawable.repeat_all_icon);
-                mRepeat.setBackgroundResource(R.drawable.round_shape_not_selected);
-                mShuffle.setBackgroundResource(R.drawable.round_shape_selected);
+                mRepeat.setImageResource(R.mipmap.repeat_all_not_selected_icon);
+                mShuffle.setImageResource(R.mipmap.shuffle_selected_icon);
                 break;
             default: break;
         }
@@ -656,6 +653,7 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<A
         if(playlist == null || playlist.isEmpty())
             return;
         mPlayList = playlist;
+        initShuffleSeed();
         MediaListFragment.updateAdapter(playlist);
     }
 
