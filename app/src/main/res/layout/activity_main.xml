@@ -7,6 +7,42 @@
     android:orientation="vertical"
     android:background="@drawable/dark_star_background">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp">
+
+        <TextView
+            android:id="@+id/play_list_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:layout_marginTop="12dp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/lishu"
+            android:textColor="#FFFFFF"
+            tools:text="Total 365 songs"/>
+
+        <ImageView
+            android:id="@+id/create_play_list_view"
+            android:src="@mipmap/create_play_list_menu_icon"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+    
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#DC2181"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"/>
+
         <android.support.v4.view.ViewPager
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/vp_fragment_list_container"
@@ -29,7 +65,7 @@
         android:orientation="horizontal"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginTop="20dp">
+        android:layout_marginTop="8dp">
 
         <TextView
             android:id="@+id/timer_text_view"
@@ -69,7 +105,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:layout_marginLeft="36dp"
         android:layout_marginRight="36dp">
 
@@ -127,7 +163,7 @@
         android:orientation="horizontal"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:layout_marginTop="24dp">
+        android:layout_marginTop="10dp">
 
         <ImageView
             android:id="@+id/mute_image_view"

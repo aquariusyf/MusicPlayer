@@ -116,6 +116,8 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<A
     private static final int SHUFFLE = 2;
     private int mShuffleScope;
     private int mShuffleSelector;
+    private TextView mPlayListName;
+    private ImageView mCreatePlayListButton;
 
     private List<Fragment> mFragmentList;
     private ViewPager mFragmentContainer;
@@ -144,6 +146,8 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<A
         mSeekBar.setEnabled(false);
         mTimerText = findViewById(R.id.timer_text_view);
         mTotalTime = findViewById(R.id.total_time_text_view);
+        mPlayListName = findViewById(R.id.play_list_name);
+        mCreatePlayListButton = findViewById(R.id.create_play_list_view);
         MediaListFragment.initAdapter(mPlayList, this);
         AdapterView.OnItemClickListener listener = new AdapterView.OnItemClickListener() {
             @Override
@@ -653,6 +657,7 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<A
         if(playlist == null || playlist.isEmpty())
             return;
         mPlayList = playlist;
+        mPlayListName.setText("Total " + mPlayList.size() + " songs");
         initShuffleSeed();
         MediaListFragment.updateAdapter(playlist);
     }
