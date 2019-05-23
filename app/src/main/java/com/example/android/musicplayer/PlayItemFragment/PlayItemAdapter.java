@@ -1,4 +1,4 @@
-package com.example.android.musicplayer;
+package com.example.android.musicplayer.PlayItemFragment;
 
 import android.app.Activity;
 import android.media.MediaPlayer;
@@ -8,6 +8,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.android.musicplayer.PlayList;
+import com.example.android.musicplayer.R;
 
 import org.w3c.dom.Text;
 

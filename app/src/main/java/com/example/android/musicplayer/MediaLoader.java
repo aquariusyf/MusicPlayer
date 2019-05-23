@@ -18,6 +18,7 @@ public class MediaLoader extends AsyncTaskLoader<ArrayList<PlayList>> {
 
     private static final String LOG_TAG = MediaLoader.class.getName();
     private Uri mUri;
+    private boolean mFirstStart = true;
 
     public MediaLoader(Context context, Uri uri) {
         super(context);
@@ -26,7 +27,10 @@ public class MediaLoader extends AsyncTaskLoader<ArrayList<PlayList>> {
 
     @Override
     protected void onStartLoading() {
-        forceLoad();
+        if (mFirstStart){
+            forceLoad();
+            mFirstStart = false;
+        }
     }
 
     @Override

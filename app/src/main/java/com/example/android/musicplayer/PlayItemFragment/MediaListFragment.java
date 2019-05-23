@@ -1,14 +1,10 @@
-package com.example.android.musicplayer;
+package com.example.android.musicplayer.PlayItemFragment;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +13,14 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.android.musicplayer.PlayList;
+import com.example.android.musicplayer.R;
+
 import java.util.ArrayList;
-import java.util.List;
 
 public class MediaListFragment extends Fragment {
 
+    private final static String LOG_TAG = MediaListFragment.class.getSimpleName();
     private static ListView mListView;
     private static PlayItemAdapter mPlayItemAdapter;
     private static AdapterView.OnItemClickListener mListener;

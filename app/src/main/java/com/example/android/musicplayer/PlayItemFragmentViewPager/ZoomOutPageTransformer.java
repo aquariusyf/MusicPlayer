@@ -1,4 +1,4 @@
-package com.example.android.musicplayer;
+package com.example.android.musicplayer.PlayItemFragmentViewPager;
 
 import android.support.v4.view.ViewPager;
 import android.view.View;
