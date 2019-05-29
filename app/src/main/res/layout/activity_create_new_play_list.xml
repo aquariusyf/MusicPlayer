@@ -15,7 +15,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:gravity="center"
-        tools:text="Edit"
+        tools:text="New Playlist"
         android:fontFamily="@font/lishu"
         android:textSize="24sp"
         android:textStyle="bold"
@@ -55,14 +55,6 @@
         android:layout_margin="16dp">
 
         <ImageView
-            android:id="@+id/delete_playlist"
-            android:src="@mipmap/delete_playlist_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:layout_marginLeft="24dp"/>
-
-        <ImageView
             android:id="@+id/cancel_create"
             android:src="@mipmap/cancel_create_icon"
             android:layout_width="wrap_content"
@@ -79,6 +71,19 @@
             android:layout_marginLeft="100dp"/>
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/add_songs_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="24dp"
+        android:gravity="center_vertical"
+        android:drawableLeft="@mipmap/create_play_list_menu_icon"
+        android:text="Add Songs"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:fontFamily="@font/lishu"/>
 
     <ListView
         android:id="@+id/media_pool_for_create"

@@ -11,15 +11,14 @@
         android:roundIcon="@mipmap/app_icon_round"
         android:supportsRtl="true"
         android:theme="@style/MyAppTheme">
+        <activity android:name=".AddSongsToPlaylistActivity.AddSongsActivity"></activity>
 
         <provider
             android:name=".PlayListDataBase.PlayListProvider"
             android:authorities="com.example.android.musicplayer"
-            android:exported="false">
+            android:exported="false"></provider>
 
-        </provider>
-
-        <activity android:name=".CreateNewPlayList"></activity>
+        <activity android:name=".CreateEditPlaylistActivity.CreateEditPlayListActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

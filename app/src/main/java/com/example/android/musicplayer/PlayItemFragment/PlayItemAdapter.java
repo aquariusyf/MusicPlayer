@@ -11,9 +11,6 @@ import android.widget.TextView;
 
 import com.example.android.musicplayer.PlayList;
 import com.example.android.musicplayer.R;
-
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 
 public class PlayItemAdapter extends ArrayAdapter<PlayList> {
