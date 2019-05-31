@@ -48,6 +48,7 @@ public class MainFragmentPlayConsole extends Fragment {
     private boolean isNewPlaylist = false;
     private Uri mPlaylistUri;
     private FragmentActivity mMyContext;
+    private TextView mBackToPlaylist;
     private TextView mTimerText;
     private SeekBar mSeekBar;
     private TextView mTotalTime;
@@ -222,6 +223,14 @@ public class MainFragmentPlayConsole extends Fragment {
         };
         MediaListFragment.setListener(listener);
         getActivity().getLoaderManager().initLoader(MEDIA_LOADER_INITIATE_ID, null, songLoaderCallBack);
+
+        mBackToPlaylist = getView().findViewById(R.id.back_to_playlist_button);
+        mBackToPlaylist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity.backToPlaylistPage();
+            }
+        });
 
         mPlayButton = getView().findViewById(R.id.play_btn);
         mPlayButton.setOnClickListener(new View.OnClickListener(){

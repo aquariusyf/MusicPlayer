@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorAccent">#D81B60</color>
-    <color name="color_all_song_list_selected">#AFB42B</color>
-    <color name="color_all_song_list_background">#40F44336</color>
+    <color name="color_all_song_list_selected">#FF5722</color>
+    <color name="color_all_song_list_background">#001976D2</color>
 </resources>

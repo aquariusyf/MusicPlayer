@@ -25,7 +25,8 @@
         android:gravity="left"
         tools:text="PlayList Name"
         android:textColor="#FFFFFF"
-        android:textSize="18sp"/>
+        android:textSize="18sp"
+        android:fontFamily="@font/xingshu"/>
 
     <TextView
         android:id="@+id/number_of_songs_in_playlist"
@@ -36,7 +37,8 @@
         tools:text="666 Songs"
         android:gravity="right"
         android:textColor="#FFFFFF"
-        android:textSize="18sp"/>
+        android:textSize="18sp"
+        android:fontFamily="@font/xingshu"/>
 
     <Button
         android:id="@+id/play_this_list_button"

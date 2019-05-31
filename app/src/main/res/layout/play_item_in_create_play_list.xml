@@ -38,7 +38,7 @@
             android:textColor="#FFFFFF"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:fontFamily="@font/lishu"
+            android:fontFamily="@font/xingshu"
             android:singleLine="true"
             tools:text="Song Name" />
 
@@ -52,7 +52,7 @@
             android:textColor="#BDC1D5"
             android:textSize="10sp"
             android:textStyle="normal"
-            android:fontFamily="@font/lishu"
+            android:fontFamily="@font/xingshu"
             android:singleLine="true"
             tools:text="Artist Name" />
 

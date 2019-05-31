@@ -15,32 +15,52 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="@drawable/dark_star_background">
+        android:background="@drawable/custom_background_color_teal_light_green">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:layout_marginTop="24dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginBottom="8dp"
                 android:text="Playlists"
                 android:textSize="24dp"
                 android:textColor="#FFFFFF"
-                android:fontFamily="@font/liuti"
+                android:fontFamily="@font/xingshu"
                 android:textStyle="bold"/>
 
             <ImageView
                 android:id="@+id/options_nemu"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="210dp"
+                android:layout_weight="1"
                 android:layout_marginTop="16dp"
+                android:paddingLeft="128dp"
                 android:src="@mipmap/create_play_list_menu_icon" />
+
+            <TextView
+                android:id="@+id/done_with_edit_button"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginLeft="24dp"
+                android:text="DONE"
+                android:textSize="18sp"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:fontFamily="@font/xingshu"
+                android:visibility="gone"/>
+
         </LinearLayout>
 
         <LinearLayout
@@ -58,7 +78,8 @@
                 android:layout_margin="16dp"
                 android:text="All Songs"
                 android:textColor="#FFFFFF"
-                android:textSize="18sp"/>
+                android:textSize="18sp"
+                android:fontFamily="@font/xingshu"/>
 
             <TextView
                 android:id="@+id/number_of_total_songs"
@@ -69,7 +90,8 @@
                 tools:text="666 Songs"
                 android:gravity="right"
                 android:textColor="#FFFFFF"
-                android:textSize="18sp"/>
+                android:textSize="18sp"
+                android:fontFamily="@font/xingshu"/>
 
             <Button
                 android:id="@+id/play_all_button"
@@ -87,20 +109,6 @@
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
             android:background="#20FFFFFF"></View>
-
-        <Button
-            android:id="@+id/done_with_edit_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="2dp"
-            android:text="DONE"
-            android:textSize="18sp"
-            android:textColor="#FFFFFF"
-            android:fontFamily="@font/lishu"
-            android:background="@color/colorAccent"
-            android:visibility="gone"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -130,7 +138,7 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:orientation="vertical"
-        android:background="@drawable/dark_star_background">
+        android:background="@drawable/custom_background_color_teal_light_green">
 
     </LinearLayout>
 

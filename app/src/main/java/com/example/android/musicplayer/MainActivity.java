@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private static MainFragmentPlayConsole mConsoleFragment;
     private MainFragmentPlayList mPlayListsFragment;
     private List<Fragment> mFragmentList;
-    private ViewPager mFragmentContainer;
+    private static ViewPager mFragmentContainerMain;
     public static ArrayList<PlayList> mAllSongs = new ArrayList<>();
 
     @Override
@@ -49,14 +49,18 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     private void initFragmentList(){
-        mFragmentContainer = findViewById(R.id.main_activity_viewpager_container);
-        mFragmentContainer.setPageTransformer(true, new ZoomOutPageTransformer());
+        mFragmentContainerMain = findViewById(R.id.main_activity_viewpager_container);
+        mFragmentContainerMain.setPageTransformer(true, new ZoomOutPageTransformer());
         mPlayListsFragment = new MainFragmentPlayList();
         mConsoleFragment = new MainFragmentPlayConsole();
         mFragmentList = new ArrayList<>();
         mFragmentList.add(mPlayListsFragment);
         mFragmentList.add(mConsoleFragment);
-        mFragmentContainer.setAdapter(new MainScreenViewPagerAdapter(getSupportFragmentManager(), mFragmentList));
+        mFragmentContainerMain.setAdapter(new MainScreenViewPagerAdapter(getSupportFragmentManager(), mFragmentList));
+    }
+
+    public static void backToPlaylistPage() {
+        mFragmentContainerMain.setCurrentItem(0, true);
     }
 
     public static MainFragmentPlayConsole getConsoleFragment() {
@@ -73,6 +77,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         return super.onKeyDown(keyCode, event);
     }
 
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
+    }
 
     @NonNull
     @Override

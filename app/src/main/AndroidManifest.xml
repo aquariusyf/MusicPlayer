@@ -10,16 +10,20 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/app_icon_round"
         android:supportsRtl="true"
-        android:theme="@style/MyAppTheme">
-        <activity android:name=".AddSongsToPlaylistActivity.AddSongsActivity"></activity>
+        android:theme="@style/MyAppTheme"
+        android:screenOrientation="portrait">
+        <activity android:name=".AddSongsToPlaylistActivity.AddSongsActivity"
+                  android:screenOrientation="portrait"></activity>
 
         <provider
             android:name=".PlayListDataBase.PlayListProvider"
             android:authorities="com.example.android.musicplayer"
             android:exported="false"></provider>
 
-        <activity android:name=".CreateEditPlaylistActivity.CreateEditPlayListActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".CreateEditPlaylistActivity.CreateEditPlayListActivity"
+                  android:screenOrientation="portrait" />
+        <activity android:name=".MainActivity"
+                  android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

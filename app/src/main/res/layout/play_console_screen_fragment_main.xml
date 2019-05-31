@@ -5,7 +5,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/dark_star_background">
+    android:background="@drawable/custom_background_color_teal_light_green">
+
+    <TextView
+        android:id="@+id/back_to_playlist_button"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:layout_marginTop="16dp"
+        android:drawablePadding="-15dp"
+        android:drawableLeft="@mipmap/arrow_left_icon"
+        android:text="Playlist"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:fontFamily="@font/xingshu"/>
 
     <android.support.v4.view.ViewPager
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -36,10 +49,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1.7"
-            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="4dp"
+            android:gravity="right"
             android:textColor="#FFFFFF"
-            android:fontFamily="@font/charlotte"
-            android:textSize="10sp"
+            android:fontFamily="@font/xingshu"
+            android:textSize="12sp"
             android:text="00 : 00"/>
 
         <SeekBar
@@ -48,8 +62,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="10"
             android:layout_centerInParent="true"
-            android:thumbTint="#DC2181"
-            android:progressTint="#DC2181"
+            android:thumbTint="#009688"
+            android:progressTint="#009688"
             android:progressBackgroundTint="#FFF8DC"
             android:thumb="@drawable/baseline_audiotrack_white_18dp" />
 
@@ -58,10 +72,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1.7"
-            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="4dp"
+            android:gravity="left"
             android:textColor="#FFFFFF"
-            android:textSize="10sp"
-            android:fontFamily="@font/charlotte"
+            android:textSize="12sp"
+            android:fontFamily="@font/xingshu"
             android:text="00 : 00"/>
     </LinearLayout>
 
@@ -145,8 +160,8 @@
             android:layout_weight="6"
             android:layout_centerInParent="true"
             android:layout_marginTop="8dp"
-            android:thumbTint="#DC2181"
-            android:progressTint="#DC2181"
+            android:thumbTint="#009688"
+            android:progressTint="#009688"
             android:progressBackgroundTint="#FFF8DC"
             android:thumb="@drawable/pets_icon" />
 
@@ -155,11 +170,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:layout_gravity="center_horizontal"
-            android:paddingTop="4dp"
+            android:gravity="left"
+            android:layout_marginTop="10dp"
             android:textColor="#FFFFFF"
-            android:textSize="10sp"
-            android:fontFamily="@font/charlotte"
+            android:textSize="12sp"
+            android:fontFamily="@font/xingshu"
             tools:text="50%"/>
     </LinearLayout>
 </LinearLayout>

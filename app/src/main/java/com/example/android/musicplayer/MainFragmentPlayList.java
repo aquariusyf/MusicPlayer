@@ -37,7 +37,7 @@ public class MainFragmentPlayList extends Fragment implements LoaderManager.Load
     private static ListView mListView;
     private ImageView mOptionsMenu;
     private static PlayListCursorAdapter mCursorAdapter;
-    private Button mDoneButton;
+    private TextView mDoneButton;
     private Button mPlayAllButton;
     private static ArrayList<Boolean> mPlaylistSelectState = new ArrayList<>();
 
