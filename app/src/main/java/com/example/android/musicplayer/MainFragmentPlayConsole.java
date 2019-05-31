@@ -43,8 +43,10 @@ import java.io.IOException;
 public class MainFragmentPlayConsole extends Fragment {
 
     private final String LOG_TAG = MainFragmentPlayConsole.class.getSimpleName();
-    private static final int MY_PERMISSION_REQUEST = 1;
-    private static final int MEDIA_LOADER_ID = 1;
+    private static final int MEDIA_LOADER_INITIATE_ID = 1;
+    private static final int MEDIA_LOADER_UPDATE_ID = 2;
+    private boolean isNewPlaylist = false;
+    private Uri mPlaylistUri;
     private FragmentActivity mMyContext;
     private TextView mTimerText;
     private SeekBar mSeekBar;
@@ -121,8 +123,6 @@ public class MainFragmentPlayConsole extends Fragment {
     private int mShuffleScope;
     private int mShuffleSelector;
 
-    private ImageView mCreatePlayListButton;
-
     private List<android.support.v4.app.Fragment> mFragmentList;
     private ViewPager mFragmentContainer;
     private TabLayout mTab;
@@ -131,7 +131,10 @@ public class MainFragmentPlayConsole extends Fragment {
             = new LoaderCallbacks<ArrayList<PlayList>>() {
         @Override
         public Loader<ArrayList<PlayList>> onCreateLoader(int i, Bundle bundle) {
-            return new MediaLoader(getActivity(), MediaStore.Audio.Media.EXTERNAL_CONTENT_URI);
+            if(i == MEDIA_LOADER_INITIATE_ID)
+                return new MediaLoader(getActivity(), MediaStore.Audio.Media.EXTERNAL_CONTENT_URI);
+            else
+                return new MediaLoader(getActivity(), mPlaylistUri);
         }
 
         @Override
@@ -141,6 +144,20 @@ public class MainFragmentPlayConsole extends Fragment {
             mPlayList = playlist;
             initShuffleSeed();
             MediaListFragment.updateAdapter(playlist);
+            if(isNewPlaylist){
+                Toast.makeText(getActivity(), getString(R.string.toast_playing), Toast.LENGTH_SHORT).show();
+                updatePlayingItemDisplay(mPlayList.size() - 1, mMediaIndex);
+                mMediaPlayer = setMediaPlayer(mMediaPlayer, mPlayList.get(mMediaIndex).getmMedia());
+                mMediaPlayer.start();
+                mPlayButton.setImageResource(R.mipmap.pause_button_icon);
+                Log.v(LOG_TAG, "Start Playing!!!" + mPlayList.get(mMediaIndex).getmSongName());
+                mMediaPlayer.setOnCompletionListener(mCompletionListener);
+                updateMarqueeText(mPlayList.get(mMediaIndex));
+                mSeekBar.setMax(mMediaPlayer.getDuration());
+                updateTotalTime(mMediaPlayer.getDuration());
+                updateSeekBar();
+            }
+            isNewPlaylist = true;
         }
 
         @Override
@@ -204,7 +221,7 @@ public class MainFragmentPlayConsole extends Fragment {
             }
         };
         MediaListFragment.setListener(listener);
-        getActivity().getLoaderManager().initLoader(MEDIA_LOADER_ID, null, songLoaderCallBack);
+        getActivity().getLoaderManager().initLoader(MEDIA_LOADER_INITIATE_ID, null, songLoaderCallBack);
 
         mPlayButton = getView().findViewById(R.id.play_btn);
         mPlayButton.setOnClickListener(new View.OnClickListener(){
@@ -400,6 +417,8 @@ public class MainFragmentPlayConsole extends Fragment {
     }
 
     private void updateSeekBar(){
+        if(mMediaPlayer == null)
+            return;
         mSeekBar.setProgress(mMediaPlayer.getCurrentPosition());
         mSeekHandler.postDelayed(mRun, 1000);
     }
@@ -444,26 +463,6 @@ public class MainFragmentPlayConsole extends Fragment {
             second += temp;
         }
         mTotalTime.setText(minute + " : " + second);
-    }
-
-    private String getDuration(String rawData) {
-        int raw = Integer.parseInt(rawData);
-        raw /= 1000;
-        int min = raw / 60;
-        int sec = raw % 60;
-        String minute = Integer.toString(min);
-        String second = Integer.toString(sec);
-        if (min < 10) {
-            String temp = minute;
-            minute = "0";
-            minute += temp;
-        }
-        if (sec < 10) {
-            String temp = second;
-            second = "0";
-            second += temp;
-        }
-        return minute + " : " + second;
     }
 
     private void initVolumeSeekBar(){
@@ -659,7 +658,7 @@ public class MainFragmentPlayConsole extends Fragment {
         Uri songUri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, songId);
         mediaPlayer = new MediaPlayer();
         try {
-            mediaPlayer.setDataSource(getActivity(), songUri);
+            mediaPlayer.setDataSource(getContext(), songUri);
             mediaPlayer.prepare();
         } catch (IOException e) {
             e.printStackTrace();
@@ -678,5 +677,15 @@ public class MainFragmentPlayConsole extends Fragment {
         mFragmentList.add(mediaListFragment);
         mFragmentList.add(currentMediaFragment);
         mFragmentContainer.setAdapter(new FragmentViewPagerAdapter(mMyContext.getSupportFragmentManager(), mFragmentList));
+    }
+
+    public void changePlaylist(Uri newPlaylistUri) {
+        if(mMediaPlayer != null) {
+           releaseMediaPlayer();
+        }
+        mMediaIndex = 0;
+        mPlaylistUri = newPlaylistUri;
+        getActivity().getLoaderManager().restartLoader(MEDIA_LOADER_UPDATE_ID, null, songLoaderCallBack);
+        Log.v(LOG_TAG, "Loader restarted new playlist Uri: " + mPlaylistUri);
     }
 }

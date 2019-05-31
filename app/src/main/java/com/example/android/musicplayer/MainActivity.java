@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private final String LOG_TAG = MainActivity.this.getClass().getSimpleName();
     private static final int MY_PERMISSION_REQUEST = 1;
     private static final int ALL_SONG_LOADER = 0;
-    private MainFragmentPlayConsole mConsoleFragment;
+    private static MainFragmentPlayConsole mConsoleFragment;
     private MainFragmentPlayList mPlayListsFragment;
     private List<Fragment> mFragmentList;
     private ViewPager mFragmentContainer;
@@ -57,6 +57,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         mFragmentList.add(mPlayListsFragment);
         mFragmentList.add(mConsoleFragment);
         mFragmentContainer.setAdapter(new MainScreenViewPagerAdapter(getSupportFragmentManager(), mFragmentList));
+    }
+
+    public static MainFragmentPlayConsole getConsoleFragment() {
+        return mConsoleFragment;
     }
 
     public static ArrayList<PlayList> getAllSongs(){

@@ -10,15 +10,16 @@ import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.content.AsyncTaskLoader;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import com.example.android.musicplayer.PlayListDataBase.PlayListContract.PlayListEntry;
 
 public class MediaLoader extends AsyncTaskLoader<ArrayList<PlayList>> {
 
     private static final String LOG_TAG = MediaLoader.class.getName();
     private Uri mUri;
-    private boolean mFirstStart = true;
 
     public MediaLoader(Context context, Uri uri) {
         super(context);
@@ -27,27 +28,37 @@ public class MediaLoader extends AsyncTaskLoader<ArrayList<PlayList>> {
 
     @Override
     protected void onStartLoading() {
-        if (mFirstStart){
+        Log.v(LOG_TAG, "onStartLoading Called with Uri = " + mUri);
+        if(!(mUri == null))
             forceLoad();
-            mFirstStart = false;
-        }
     }
 
     @Override
     public ArrayList<PlayList> loadInBackground() {
+        Log.v(LOG_TAG, "loadInBackground Called with Uri = " + mUri);
         if(mUri == null){
             return null;
         }
+
         ArrayList<PlayList> playlist = new ArrayList<>();
+        if(mUri == MediaStore.Audio.Media.EXTERNAL_CONTENT_URI)
+            loadAllSongsAtStart(playlist);
+        else
+            loadSongsOfPlaylist(playlist);
+        mUri = null;
+        return playlist;
+    }
+
+    private void loadAllSongsAtStart(ArrayList<PlayList> playlist) {
         ContentResolver musicContentResolver = getContext().getContentResolver();
         Cursor musicCursor = musicContentResolver.query(mUri, null, null, null, null);
         if(musicCursor == null){
             Toast.makeText(getContext(), getContext().getString(R.string.load_music_failed), Toast.LENGTH_LONG).show();
-            return null;
+            return;
         }
         else if(!musicCursor.moveToFirst()){
             Toast.makeText(getContext(), getContext().getString(R.string.toast_no_song_found), Toast.LENGTH_LONG).show();
-            return null;
+            return;
         }
         else{
             do{
@@ -71,7 +82,49 @@ public class MediaLoader extends AsyncTaskLoader<ArrayList<PlayList>> {
                 playlist.add(new PlayList(songId, songName, artistName, songDuration, albumImageBitmap));
             } while(musicCursor.moveToNext());
         }
-        return playlist;
+    }
+
+    private void loadSongsOfPlaylist(ArrayList<PlayList> playlist){
+        ContentResolver playlistContentResolver = getContext().getContentResolver();
+        Cursor playlistCursor = playlistContentResolver.query(mUri, null, null, null, null);
+        if(!playlistCursor.moveToFirst())
+            return;
+        String songIdsRaw = playlistCursor.getString(playlistCursor.getColumnIndexOrThrow(PlayListEntry.COLUMN_MEDIA_ID));
+        if(songIdsRaw == null || songIdsRaw.isEmpty())
+            return;
+        String[] songIdArray = songIdsRaw.split(" ");
+        long[] songIds = new long[songIdArray.length];
+        for(int i = 0; i < songIdArray.length; i++)
+            songIds[i] = Long.parseLong(songIdArray[i]);
+
+        for(int j = 0; j < songIds.length; j++) {
+            Uri songUri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, songIds[j]);
+            ContentResolver songContentResolver = getContext().getContentResolver();
+            Cursor songCursor = songContentResolver.query(songUri, null, null, null, null);
+            if(!songCursor.moveToFirst()) {
+                return;
+            }
+
+            long songId = songCursor.getLong(songCursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID));
+            String songName = songCursor.getString(songCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE));
+            String artistName = songCursor.getString(songCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST));
+            if(artistName.isEmpty() || artistName == null || artistName.equals("<unknown>")) {
+                artistName = "Unknown Artist";
+            }
+
+            MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+            mmr.setDataSource(getContext(),songUri);
+            String songDurationRaw = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+            String songDuration = getDuration(songDurationRaw);
+            byte[] albumImageRawData = mmr.getEmbeddedPicture();
+            Bitmap albumImageBitmap = null;
+            if(albumImageRawData != null)
+                albumImageBitmap = BitmapFactory.decodeByteArray(albumImageRawData, 0, albumImageRawData.length);
+            else
+                albumImageBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.mipmap.default_album_icon);
+            playlist.add(new PlayList(songId, songName, artistName, songDuration, albumImageBitmap));
+        }
+        Log.v(LOG_TAG, "loadSongOfPlaylist Called");
     }
 
     private String getDuration(String rawData) {

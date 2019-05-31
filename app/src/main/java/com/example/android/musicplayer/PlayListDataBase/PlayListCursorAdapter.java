@@ -8,11 +8,13 @@ import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.musicplayer.CreateEditPlaylistActivity.CreateEditPlayListActivity;
+import com.example.android.musicplayer.MainActivity;
 import com.example.android.musicplayer.MainFragmentPlayList;
 import com.example.android.musicplayer.PlayListDataBase.PlayListContract.PlayListEntry;
 import com.example.android.musicplayer.R;
@@ -37,7 +39,7 @@ public class PlayListCursorAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, final Cursor cursor) {
         TextView name = view.findViewById(R.id.single_playlist_name);
-        String playListName = cursor.getString(cursor.getColumnIndexOrThrow(PlayListEntry.COLUMN_PLAYLIST_NAME));
+        final String playListName = cursor.getString(cursor.getColumnIndexOrThrow(PlayListEntry.COLUMN_PLAYLIST_NAME));
         name.setText(playListName);
         long id = cursor.getLong(cursor.getColumnIndexOrThrow(PlayListEntry._ID));
         final Uri currentPlayListUri = ContentUris.withAppendedId(PlayListEntry.CONTENT_URI, id);
@@ -74,13 +76,25 @@ public class PlayListCursorAdapter extends CursorAdapter {
                 }
             }
         });
+
+        Button playButton = view.findViewById(R.id.play_this_list_button);
+        playButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity.getConsoleFragment().changePlaylist(currentPlayListUri);
+            }
+        });
+
         if(mShowDeleteButton)
             deleteButton.setVisibility(View.VISIBLE);
-        else
+        else {
             deleteButton.setVisibility(View.GONE);
+            deleteButton.setImageResource(R.mipmap.delete_playlist_unselected_icon);
+        }
     }
 
     public static void setDeleteButtonState(boolean state) {
         mShowDeleteButton = state;
     }
+
 }

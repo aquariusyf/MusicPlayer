@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -37,6 +38,7 @@ public class MainFragmentPlayList extends Fragment implements LoaderManager.Load
     private ImageView mOptionsMenu;
     private static PlayListCursorAdapter mCursorAdapter;
     private Button mDoneButton;
+    private Button mPlayAllButton;
     private static ArrayList<Boolean> mPlaylistSelectState = new ArrayList<>();
 
     public TextView mTotalNumberOfSongs;
@@ -60,13 +62,19 @@ public class MainFragmentPlayList extends Fragment implements LoaderManager.Load
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
+        mPlayAllButton = view.findViewById(R.id.play_all_button);
+        mPlayAllButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity.getConsoleFragment().changePlaylist(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI);
+            }
+        });
+
         mDoneButton = view.findViewById(R.id.done_with_edit_button);
         mDoneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 PlayListCursorAdapter.setDeleteButtonState(false);
-                ImageView resetDeleteButton = mListView.findViewById(R.id.delete_button);
-                resetDeleteButton.setImageResource(R.mipmap.delete_playlist_unselected_icon);
                 mCursorAdapter.notifyDataSetChanged();
                 mDoneButton.setVisibility(View.GONE);
                 deletePlaylist();
@@ -183,6 +191,8 @@ public class MainFragmentPlayList extends Fragment implements LoaderManager.Load
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        if(data == null)
+            return;
         mCursorAdapter.swapCursor(data);
         if(mPlaylistSelectState == null || mPlaylistSelectState.isEmpty())
             for(int i = 0; i < data.getCount(); i++)
