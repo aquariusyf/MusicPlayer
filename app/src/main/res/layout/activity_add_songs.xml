@@ -16,7 +16,7 @@
         android:text="Add Songs"
         android:textSize="32sp"
         android:textColor="#FFFFFF"
-        android:fontFamily="@font/xingshu"/>
+        android:fontFamily="@font/calibri"/>
 
     <ListView
         android:id="@+id/add_songs_list_view"
@@ -43,7 +43,7 @@
             android:textSize="28dp"
             android:textColor="#FFFFFF"
             android:textStyle="bold"
-            android:fontFamily="@font/xingshu"/>
+            android:fontFamily="@font/calibri"/>
 
         <TextView
             android:id="@+id/cancel_button"
@@ -55,7 +55,7 @@
             android:textSize="28dp"
             android:textColor="#FFFFFF"
             android:textStyle="bold"
-            android:fontFamily="@font/xingshu"/>
+            android:fontFamily="@font/calibri"/>
 
     </LinearLayout>
 

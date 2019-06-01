@@ -22,7 +22,7 @@
         android:gravity="center"
         android:layout_marginTop="6dp"
         android:textSize="24sp"
-        android:fontFamily="@font/xingshu"
+        android:fontFamily="@font/calibri"
         android:textColor="#FFFFFF"
         android:singleLine="true"
         android:ellipsize="marquee"

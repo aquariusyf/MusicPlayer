@@ -31,7 +31,7 @@
             android:layout_marginTop="8dp"
             android:gravity="center"
             tools:text="New Playlist"
-            android:fontFamily="@font/xingshu"
+            android:fontFamily="@font/calibri"
             android:textSize="24sp"
             android:textStyle="bold"
             android:textColor="#FFFFFF"
@@ -53,9 +53,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:descendantFocusability="beforeDescendants"
-        android:focusableInTouchMode="true">
+        android:layout_marginRight="16dp">
 
         <TextView
             android:layout_width="0dp"
@@ -63,7 +61,7 @@
             android:layout_weight="1"
             android:text="Name: "
             android:textColor="#FFFFFF"
-            android:fontFamily="@font/xingshu"
+            android:fontFamily="@font/calibri"
             android:gravity="center"
             android:textSize="20sp"/>
 
@@ -75,7 +73,7 @@
             android:hint="Input name"
             android:textColorHint="#43E1D6"
             android:inputType="textCapSentences"
-            android:fontFamily="@font/xingshu"/>
+            android:fontFamily="@font/calibri"/>
     </LinearLayout>
 
     <TextView
@@ -90,7 +88,7 @@
         android:textSize="24sp"
         android:textStyle="bold"
         android:textColor="#FFFFFF"
-        android:fontFamily="@font/xingshu"/>
+        android:fontFamily="@font/calibri"/>
 
     <ListView
         android:id="@+id/media_pool_for_create"
