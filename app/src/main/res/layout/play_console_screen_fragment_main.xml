@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/custom_background_color_teal_light_green">
+    android:background="@drawable/custom_background_color">
 
     <TextView
         android:id="@+id/back_to_playlist_button"
@@ -62,8 +62,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="10"
             android:layout_centerInParent="true"
-            android:thumbTint="#009688"
-            android:progressTint="#009688"
+            android:thumbTint="#00FFDE"
+            android:progressTint="#00FFDE"
             android:progressBackgroundTint="#FFF8DC"
             android:thumb="@drawable/baseline_audiotrack_white_18dp" />
 
@@ -160,8 +160,8 @@
             android:layout_weight="6"
             android:layout_centerInParent="true"
             android:layout_marginTop="8dp"
-            android:thumbTint="#009688"
-            android:progressTint="#009688"
+            android:thumbTint="#00FFDE"
+            android:progressTint="#00FFDE"
             android:progressBackgroundTint="#FFF8DC"
             android:thumb="@drawable/pets_icon" />
 

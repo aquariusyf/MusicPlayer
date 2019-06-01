@@ -51,7 +51,7 @@ public class AddSongsListAdapter extends ArrayAdapter {
             albumImageView.setScaleX(1.0f);
             albumImageView.setScaleY(1.0f);
         } else {
-            albumImageView.setImageResource(R.mipmap.default_album_icon);
+            albumImageView.setImageResource(R.drawable.new_default_album_icon);
             albumImageView.setScaleX(1.26f);
             albumImageView.setScaleY(1.2f);
         }

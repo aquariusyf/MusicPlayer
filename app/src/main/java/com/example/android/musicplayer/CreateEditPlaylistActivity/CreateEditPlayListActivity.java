@@ -262,7 +262,7 @@ public class CreateEditPlayListActivity extends AppCompatActivity {
             if(albumImageRawData != null)
                 albumImageBitmap = BitmapFactory.decodeByteArray(albumImageRawData, 0, albumImageRawData.length);
             else
-                albumImageBitmap = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.mipmap.default_album_icon);
+                albumImageBitmap = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.new_default_album_icon);
             playlist.add(new PlayList(songId, songName, artistName, songDuration, albumImageBitmap));
         }
 

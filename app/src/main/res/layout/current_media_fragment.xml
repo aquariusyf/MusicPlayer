@@ -7,7 +7,7 @@
     android:id="@+id/current_media_fragment_layout">
 
     <ImageView
-        android:src="@mipmap/default_album_icon"
+        android:src="@drawable/new_default_album_icon"
         android:id="@+id/current_media_fragment_image"
         android:layout_width="240dp"
         android:layout_height="240dp"

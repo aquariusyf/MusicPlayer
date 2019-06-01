@@ -10,7 +10,7 @@
     <item>
 
         <bitmap
-            android:src="@drawable/sound_track_image"
+            android:src="@drawable/dark_star_background"
             android:gravity="center"/>
 
     </item>
