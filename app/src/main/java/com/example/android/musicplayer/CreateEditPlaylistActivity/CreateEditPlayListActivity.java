@@ -33,6 +33,7 @@ import com.example.android.musicplayer.PlayListDataBase.PlayListDbHelper;
 import com.example.android.musicplayer.R;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class CreateEditPlayListActivity extends AppCompatActivity {
 
@@ -52,7 +53,8 @@ public class CreateEditPlayListActivity extends AppCompatActivity {
     private static String mMediaIds = "";
     private static String mAddedMediaIds = "";
     private long[] mIds;
-    private ArrayList<PlayList> mCurrentPlayList = new ArrayList<>();
+    private static ArrayList<Integer> mDeleteButtonState = new ArrayList<>();
+    private static ArrayList<PlayList> mCurrentPlayList = new ArrayList<>();
     private ArrayList<PlayList> mAddedPlayList = new ArrayList<>();
     private static boolean mIsFromAddSongs;
     private CreatePlayListMediaListAdapter mAdapter;
@@ -85,6 +87,7 @@ public class CreateEditPlayListActivity extends AppCompatActivity {
                 convertIdFromStringToLong(mMediaIds);
                 if(state == EDIT)
                     loadSongList(mCurrentPlayList);
+                setDeleteButtonState();
                 Log.v(LOG_TAG, "currentPlayListName: " + currentPlayListName);
                 mInputName.setText(currentPlayListName);
             }
@@ -152,7 +155,7 @@ public class CreateEditPlayListActivity extends AppCompatActivity {
         mMediaListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                removeMediaId(position);
+                showDeleteButton(position);
             }
         });
 
@@ -164,6 +167,8 @@ public class CreateEditPlayListActivity extends AppCompatActivity {
     protected void onDestroy() {
         mMediaIds = "";
         mAddedMediaIds = "";
+        mCurrentPlayList = new ArrayList<>();
+        mDeleteButtonState = new ArrayList<>();
         super.onDestroy();
     }
 
@@ -175,6 +180,7 @@ public class CreateEditPlayListActivity extends AppCompatActivity {
             loadSongList(mAddedPlayList);
             mAdapter.addAll(mAddedPlayList);
             mMediaIds += mAddedMediaIds;
+            setDeleteButtonState();
             Log.v(LOG_TAG, "Current media list after add songs: " + mCurrentPlayList);
             Log.v(LOG_TAG, "Media list after add songs: " + mMediaIds);
             mIsFromAddSongs = false;
@@ -216,16 +222,34 @@ public class CreateEditPlayListActivity extends AppCompatActivity {
         return true;
     }
 
-    private void removeMediaId(int pos) {
+    private void showDeleteButton(int pos) {
+        int firstVisiblePosition = mMediaListView.getFirstVisiblePosition();
+        int position = pos - firstVisiblePosition;
+        View thisItem = mMediaListView.getChildAt(position);
+        TextView deleteButton = thisItem.findViewById(R.id.delete_song_from_playlist_button);
+        if(mDeleteButtonState.get(pos) == View.GONE){
+            mDeleteButtonState.set(pos, View.VISIBLE);
+            deleteButton.setVisibility(mDeleteButtonState.get(pos));
+        }
+        else {
+            mDeleteButtonState.set(pos, View.GONE);
+            deleteButton.setVisibility(mDeleteButtonState.get(pos));
+        }
+    }
+
+    public static void deleteSong(int pos) {
         int position = pos;
         String id = Long.toString(mCurrentPlayList.get(position).getmMedia());
         id += " ";
         if(mMediaIds.contains(id)){
             mMediaIds =  mMediaIds.replaceFirst(id, "");
-            Log.v(LOG_TAG, "Media removed: " + id);
         }
         mCurrentPlayList.remove(position);
-        mAdapter.notifyDataSetChanged();
+        mDeleteButtonState.remove(position);
+    }
+
+    private void setDeleteButtonState(){
+        mDeleteButtonState = new ArrayList<>(Collections.nCopies(mCurrentPlayList.size(), View.GONE));
     }
 
     public static void getAddedSongIds(String ids) {

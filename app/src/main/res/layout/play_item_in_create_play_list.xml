@@ -6,7 +6,22 @@
     android:layout_height="wrap_content"
     android:id="@+id/play_item"
     android:layout_margin="16dp"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:animateLayoutChanges="true">
+
+    <TextView
+        android:id="@+id/delete_song_from_playlist_button"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="DELETE"
+        android:textSize="20sp"
+        android:textColor="#FFFFFF"
+        android:fontFamily="@font/calibri"
+        android:textStyle="bold"
+        android:background="#D32F2F"
+        android:visibility="gone"/>
 
     <ImageView
         android:id="@+id/album_image"

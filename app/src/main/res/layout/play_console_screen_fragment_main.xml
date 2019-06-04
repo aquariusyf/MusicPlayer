@@ -151,13 +151,13 @@
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:layout_gravity="center_horizontal"
-            android:paddingLeft="48dp"/>
+            android:paddingLeft="36dp"/>
 
         <SeekBar
             android:id="@+id/volume_seekbar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="6"
+            android:layout_weight="11"
             android:layout_centerInParent="true"
             android:layout_marginTop="8dp"
             android:thumbTint="#00FFDE"

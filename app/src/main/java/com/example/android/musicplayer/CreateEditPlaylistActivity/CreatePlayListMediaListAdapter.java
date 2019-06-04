@@ -23,7 +23,7 @@ public class CreatePlayListMediaListAdapter extends ArrayAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, final ViewGroup parent) {
         mMediaList = convertView;
         if (convertView == null) {
             mMediaList = LayoutInflater.from(getContext()).inflate(
@@ -46,6 +46,17 @@ public class CreatePlayListMediaListAdapter extends ArrayAdapter {
             albumImageView.setScaleY(1.2f);
         }
         albumImageView.setScaleType(ImageView.ScaleType.FIT_XY);
+
+        final TextView deleteButton = mMediaList.findViewById(R.id.delete_song_from_playlist_button);
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteButton.setVisibility(View.GONE);
+                CreateEditPlayListActivity.deleteSong(position);
+                notifyDataSetChanged();
+            }
+        });
+
         return mMediaList;
     }
 }
