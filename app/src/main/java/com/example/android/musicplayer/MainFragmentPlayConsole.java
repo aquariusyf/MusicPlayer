@@ -43,8 +43,8 @@ import java.io.IOException;
 public class MainFragmentPlayConsole extends Fragment {
 
     private final String LOG_TAG = MainFragmentPlayConsole.class.getSimpleName();
-    private static final int MEDIA_LOADER_INITIATE_ID = 1;
-    private static final int MEDIA_LOADER_UPDATE_ID = 2;
+    public static final int MEDIA_LOADER_INITIATE_ID = 1;
+    public static final int MEDIA_LOADER_UPDATE_ID = 2;
     private boolean isNewPlaylist = false;
     private Uri mPlaylistUri;
     private FragmentActivity mMyContext;
@@ -140,9 +140,14 @@ public class MainFragmentPlayConsole extends Fragment {
 
         @Override
         public void onLoadFinished(Loader<ArrayList<PlayList>> loader, ArrayList<PlayList> playlist) {
-            if(playlist == null || playlist.isEmpty())
+            if(playlist == null || playlist.isEmpty()){
+                MainActivity.setTotal(playlist);
                 return;
+            }
             mPlayList = playlist;
+            if(!isNewPlaylist){
+                MainActivity.setTotal(mPlayList);
+            }
             initShuffleSeed();
             MediaListFragment.updateAdapter(playlist);
             if(isNewPlaylist){

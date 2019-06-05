@@ -20,6 +20,7 @@ public class MediaLoader extends AsyncTaskLoader<ArrayList<PlayList>> {
 
     private static final String LOG_TAG = MediaLoader.class.getName();
     private Uri mUri;
+    private static ArrayList<PlayList> mSongList = new ArrayList<>();
 
     public MediaLoader(Context context, Uri uri) {
         super(context);
@@ -29,7 +30,7 @@ public class MediaLoader extends AsyncTaskLoader<ArrayList<PlayList>> {
     @Override
     protected void onStartLoading() {
         Log.v(LOG_TAG, "onStartLoading Called with Uri = " + mUri);
-        if(!(mUri == null))
+        if(mUri != null)
             forceLoad();
     }
 
@@ -40,13 +41,13 @@ public class MediaLoader extends AsyncTaskLoader<ArrayList<PlayList>> {
             return null;
         }
 
-        ArrayList<PlayList> playlist = new ArrayList<>();
+        mSongList = new ArrayList<>();
         if(mUri == MediaStore.Audio.Media.EXTERNAL_CONTENT_URI)
-            loadAllSongsAtStart(playlist);
+            loadAllSongsAtStart(mSongList);
         else
-            loadSongsOfPlaylist(playlist);
+            loadSongsOfPlaylist(mSongList);
         mUri = null;
-        return playlist;
+        return mSongList;
     }
 
     private void loadAllSongsAtStart(ArrayList<PlayList> playlist) {

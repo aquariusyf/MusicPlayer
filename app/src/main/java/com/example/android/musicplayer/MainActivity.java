@@ -1,19 +1,14 @@
 package com.example.android.musicplayer;
 
 import android.Manifest;
-import android.app.LoaderManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.content.Loader;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NotificationCompat;
@@ -29,13 +24,13 @@ import com.example.android.musicplayer.PlayItemFragmentViewPager.ZoomOutPageTran
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<ArrayList<PlayList>> {
+public class MainActivity extends AppCompatActivity  {
 
     private final String LOG_TAG = MainActivity.this.getClass().getSimpleName();
     private static final int MY_PERMISSION_REQUEST = 1;
     private static final int ALL_SONG_LOADER = 0;
     private static MainFragmentPlayConsole mConsoleFragment;
-    private MainFragmentPlayList mPlayListsFragment;
+    private static MainFragmentPlayList mPlayListsFragment;
     private List<Fragment> mFragmentList;
     private static ViewPager mFragmentContainerMain;
 
@@ -63,7 +58,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                         new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MY_PERMISSION_REQUEST);
             }
         }
-        getLoaderManager().initLoader(ALL_SONG_LOADER, null, this);
         initFragmentList();
         initNotification();
         showNotification();
@@ -90,6 +84,15 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     public static ArrayList<PlayList> getAllSongs(){
         return mAllSongs;
+    }
+
+    public static void setTotal(ArrayList<PlayList> playList){
+        if(playList == null || playList.isEmpty()){
+            mPlayListsFragment.setTotalNumberOfSongs(0);
+            return;
+        }
+        mAllSongs = playList;
+        mPlayListsFragment.setTotalNumberOfSongs(mAllSongs.size());
     }
 
     private void initNotification(){
@@ -120,6 +123,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     @Override
+    protected void onDestroy() {
+        mNotificationManager.cancel(NOTIFICATION_ID);
+        super.onDestroy();
+    }
+
+    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         mConsoleFragment.onKeyDownFragment(keyCode);
         return super.onKeyDown(keyCode, event);
@@ -128,26 +137,5 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onBackPressed() {
         moveTaskToBack(true);
-    }
-
-    @NonNull
-    @Override
-    public Loader<ArrayList<PlayList>> onCreateLoader(int i, @Nullable Bundle bundle) {
-        return new MediaLoader(getBaseContext(), MediaStore.Audio.Media.EXTERNAL_CONTENT_URI);
-    }
-
-    @Override
-    public void onLoadFinished(@NonNull Loader<ArrayList<PlayList>> loader, ArrayList<PlayList> playList) {
-        if(playList == null || playList.isEmpty()){
-            mPlayListsFragment.setTotalNumberOfSongs(0);
-            return;
-        }
-        mAllSongs = playList;
-        mPlayListsFragment.setTotalNumberOfSongs(mAllSongs.size());
-    }
-
-    @Override
-    public void onLoaderReset(@NonNull Loader<ArrayList<PlayList>> loader) {
-
     }
 }
