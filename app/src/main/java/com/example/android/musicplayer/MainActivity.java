@@ -1,19 +1,29 @@
 package com.example.android.musicplayer;
 
 import android.Manifest;
+import android.app.LoaderManager;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Intent;
+import android.content.Loader;
 import android.content.pm.PackageManager;
+import android.os.Build;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.app.LoaderManager;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
-import android.content.Loader;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
-import android.support.v4.app.Fragment;
+import android.widget.RemoteViews;
+
 import com.example.android.musicplayer.PlayItemFragmentViewPager.ZoomOutPageTransformer;
 
 import java.util.ArrayList;
@@ -28,6 +38,15 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private MainFragmentPlayList mPlayListsFragment;
     private List<Fragment> mFragmentList;
     private static ViewPager mFragmentContainerMain;
+
+    private NotificationManager mNotificationManager;
+    private NotificationChannel mNotificationChannel;
+    private RemoteViews mNotificationView;
+    private Notification mNotification;
+    private static final int NOTIFICATION_ID = 100;
+    private static final String CHANNEL_ID = "channel01";
+    private static final String CHANNEL_NAME = "Notification channel";
+
     public static ArrayList<PlayList> mAllSongs = new ArrayList<>();
 
     @Override
@@ -46,6 +65,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         }
         getLoaderManager().initLoader(ALL_SONG_LOADER, null, this);
         initFragmentList();
+        initNotification();
+        showNotification();
     }
 
     private void initFragmentList(){
@@ -69,6 +90,33 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     public static ArrayList<PlayList> getAllSongs(){
         return mAllSongs;
+    }
+
+    private void initNotification(){
+        mNotificationManager = (NotificationManager) this.getSystemService(NOTIFICATION_SERVICE);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            mNotificationChannel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
+            mNotificationChannel.enableVibration(false);
+            mNotificationChannel.setVibrationPattern(new long[]{ 0 });
+            mNotificationManager.createNotificationChannel(mNotificationChannel);
+        }
+
+        Intent mainIntent = new Intent(MainActivity.this, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(MainActivity.this, 0, mainIntent, 0);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+        mNotificationView = new RemoteViews(getPackageName(), R.layout.notification_layout);
+        builder.setContentIntent(pendingIntent);
+        builder.setContent(mNotificationView);
+        builder.setChannelId(CHANNEL_ID);
+        builder.setSmallIcon(R.drawable.pets_icon);
+        builder.setOngoing(true);
+        mNotification = builder.build();
+    }
+
+    private void showNotification(){
+        mNotificationManager.notify(NOTIFICATION_ID, mNotification);
+        Log.v(LOG_TAG, "Show notification called");
     }
 
     @Override
