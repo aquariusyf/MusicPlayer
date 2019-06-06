@@ -28,7 +28,6 @@ public class MainActivity extends AppCompatActivity  {
 
     private final String LOG_TAG = MainActivity.this.getClass().getSimpleName();
     private static final int MY_PERMISSION_REQUEST = 1;
-    private static final int ALL_SONG_LOADER = 0;
     private static MainFragmentPlayConsole mConsoleFragment;
     private static MainFragmentPlayList mPlayListsFragment;
     private List<Fragment> mFragmentList;
@@ -46,6 +45,7 @@ public class MainActivity extends AppCompatActivity  {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.v(LOG_TAG, "Main activity onCreate called");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -105,7 +105,9 @@ public class MainActivity extends AppCompatActivity  {
         }
 
         Intent mainIntent = new Intent(MainActivity.this, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(MainActivity.this, 0, mainIntent, 0);
+        mainIntent.setAction(Intent.ACTION_MAIN);
+        mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+        PendingIntent pendingIntent = PendingIntent.getActivity(MainActivity.this, 0, mainIntent,0);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
         mNotificationView = new RemoteViews(getPackageName(), R.layout.notification_layout);

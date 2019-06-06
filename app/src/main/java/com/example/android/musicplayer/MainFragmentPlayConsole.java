@@ -196,7 +196,7 @@ public class MainFragmentPlayConsole extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        Log.v(LOG_TAG, "Console fragment onCreate called");
         initFragmentList();
         getActivity().setVolumeControlStream(AudioManager.STREAM_MUSIC);
         initVolumeSeekBar();
