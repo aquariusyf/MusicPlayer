@@ -77,12 +77,13 @@ public class MainFragmentPlayConsole extends Fragment {
             releaseMediaPlayer();
             switch (mPlayState){
                 case REPEAT_ALL:
-                    updatePlayingItemDisplay(mMediaIndex, mMediaIndex + 1);
                     if(mMediaIndex == mPlayList.size() - 1){
+                        updatePlayingItemDisplay(mMediaIndex, 0);
                         mMediaIndex = 0;
                         mMediaPlayer = setMediaPlayer(mMediaPlayer, mPlayList.get(mMediaIndex).getmMedia());
                     }
                     else{
+                        updatePlayingItemDisplay(mMediaIndex, mMediaIndex + 1);
                         mMediaIndex++;
                         mMediaPlayer = setMediaPlayer(mMediaPlayer, mPlayList.get(mMediaIndex).getmMedia());
                     }
