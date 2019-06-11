@@ -41,6 +41,7 @@
             android:fadingEdge="horizontal"
             android:scrollHorizontally="false"
             android:focusable="true"
+            android:focusedByDefault="true"
             android:focusableInTouchMode="true"
             android:marqueeRepeatLimit="marquee_forever">
             <requestFocus/>
@@ -63,6 +64,7 @@
             android:fadingEdge="horizontal"
             android:scrollHorizontally="false"
             android:focusable="true"
+            android:focusedByDefault="true"
             android:focusableInTouchMode="true"
             android:marqueeRepeatLimit="marquee_forever">
             <requestFocus/>

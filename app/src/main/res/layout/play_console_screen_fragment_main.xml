@@ -136,45 +136,4 @@
             android:layout_margin="10dp" />
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="10dp">
-
-        <ImageView
-            android:id="@+id/mute_image_view"
-            android:src="@drawable/volume_on_icon"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:layout_gravity="center_horizontal"
-            android:paddingLeft="36dp"/>
-
-        <SeekBar
-            android:id="@+id/volume_seekbar"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="11"
-            android:layout_centerInParent="true"
-            android:layout_marginTop="8dp"
-            android:thumbTint="#00FFDE"
-            android:progressTint="#00FFDE"
-            android:progressBackgroundTint="#FFF8DC"
-            android:thumb="@drawable/pets_icon" />
-
-        <TextView
-            android:id="@+id/volume_text_view"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:gravity="left"
-            android:layout_marginTop="10dp"
-            android:textColor="#FFFFFF"
-            android:textSize="12sp"
-            android:fontFamily="@font/calibri"
-            tools:text="50%"/>
-    </LinearLayout>
 </LinearLayout>

@@ -1,4 +1,4 @@
-package com.example.android.musicplayer;
+package com.example.android.musicplayer.Notification;
 
 public class NotificationActions {
     public final static String ACTION_PLAY_PAUSE = "com.example.android.musicplayer.PLAY_PAUSE";

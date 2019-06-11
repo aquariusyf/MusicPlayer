@@ -21,6 +21,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.RemoteViews;
 
+import com.example.android.musicplayer.Notification.NotificationActions;
 import com.example.android.musicplayer.PlayItemFragmentViewPager.ZoomOutPageTransformer;
 
 import java.util.ArrayList;
@@ -196,12 +197,6 @@ public class MainActivity extends AppCompatActivity  {
     protected void onDestroy() {
         mNotificationManager.cancel(NOTIFICATION_ID);
         super.onDestroy();
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        mConsoleFragment.onKeyDownFragment(keyCode);
-        return super.onKeyDown(keyCode, event);
     }
 
     @Override

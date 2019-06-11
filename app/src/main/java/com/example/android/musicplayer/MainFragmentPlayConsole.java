@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.example.android.musicplayer.Notification.NotificationActions;
 import com.example.android.musicplayer.PlayItemFragment.MediaListFragment;
 
 import java.util.ArrayList;
@@ -32,7 +33,6 @@ import android.os.Handler;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Loader;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
@@ -54,12 +54,6 @@ public class MainFragmentPlayConsole extends Fragment {
     private TextView mTimerText;
     private SeekBar mSeekBar;
     private TextView mTotalTime;
-    private SeekBar mVolumeSeekBar;
-    private AudioManager mAudioManager;
-    private TextView mVolume;
-    private ImageView mMute;
-    private int mPreviousVolume;
-    private boolean mIsMute;
     private static ImageView mPlayButton;
     private static ImageView mNextButton;
     private static ImageView mPreviousButton;
@@ -202,8 +196,6 @@ public class MainFragmentPlayConsole extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Log.v(LOG_TAG, "Console fragment onCreate called");
         initFragmentList();
-        getActivity().setVolumeControlStream(AudioManager.STREAM_MUSIC);
-        initVolumeSeekBar();
         initRepeatAndShuffleButton();
         mSeekBar = getView().findViewById(R.id.seekbar);
         mSeekBar.setEnabled(false);
@@ -485,117 +477,6 @@ public class MainFragmentPlayConsole extends Fragment {
             second += temp;
         }
         mTotalTime.setText(minute + " : " + second);
-    }
-
-    private void initVolumeSeekBar(){
-        try{
-            mPreviousVolume = 5;
-            mIsMute = false;
-            mAudioManager = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
-            mVolumeSeekBar = getView().findViewById(R.id.volume_seekbar);
-            mMute = getView().findViewById(R.id.mute_image_view);
-            mVolume = getView().findViewById(R.id.volume_text_view);
-            mVolumeSeekBar.setMax(mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC));
-            mVolumeSeekBar.setProgress(mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC));
-            mVolumeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                @Override
-                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, progress, 0);
-                    updateVolumeText();
-                    setVolumeIcon();
-                }
-
-                @Override
-                public void onStartTrackingTouch(SeekBar seekBar) {
-
-                }
-
-                @Override
-                public void onStopTrackingTouch(SeekBar seekBar) {
-
-                }
-            });
-
-            mMute.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(mIsMute)
-                        setUnmute();
-                    else
-                        setMute();
-                }
-            });
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        updateVolumeText();
-        setVolumeIcon();
-    }
-
-    public void onKeyDownFragment(int keyCode){
-        if(mAudioManager == null)
-            return;
-        if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
-            try{
-                mVolumeSeekBar.setProgress(mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC) - 1);
-            } catch (Error e) {
-
-            }
-        } else if (keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
-            try{
-                mVolumeSeekBar.setProgress(mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC) + 1);
-            } catch (Error e) {
-
-            }
-        }
-        updateVolumeText();
-        setVolumeIcon();
-    }
-
-    private void setVolumeIcon(){
-        if(mVolumeSeekBar.getProgress() == 0){
-            mMute.setImageResource(R.drawable.volume_off_icon);
-            mIsMute = true;
-        }
-
-        else{
-            mMute.setImageResource(R.drawable.volume_on_icon);
-            mIsMute = false;
-        }
-    }
-
-    private void setMute(){
-        if(mIsMute)
-            return;
-        mPreviousVolume = mVolumeSeekBar.getProgress();
-        mVolumeSeekBar.setProgress(0);
-        mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 0, 0);
-        setVolumeIcon();
-        Toast.makeText(getActivity(), getString(R.string.mute), Toast.LENGTH_LONG).show();
-    }
-
-    private void setUnmute(){
-        if(!mIsMute)
-            return;
-        mVolumeSeekBar.setProgress(mPreviousVolume);
-        mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, mPreviousVolume, 0);
-        setVolumeIcon();
-        mPreviousVolume = 5;
-        Toast.makeText(getActivity(), getString(R.string.unmute), Toast.LENGTH_LONG).show();
-    }
-
-    private void updateVolumeText(){
-        String volume = new String();
-        double currentVolume = (double) mVolumeSeekBar.getProgress();
-        double maxVolume = (double) mVolumeSeekBar.getMax();
-        Log.v(LOG_TAG, "current volume: " + currentVolume);
-        Log.v(LOG_TAG, "Max volume: " + maxVolume);
-        int percentage = (int) (currentVolume/maxVolume * 100);
-        Log.v(LOG_TAG, "Percentage: " + percentage);
-        volume = Integer.toString(percentage);
-        volume += "%";
-        mVolume.setText(volume);
     }
 
     private void initRepeatAndShuffleButton(){
