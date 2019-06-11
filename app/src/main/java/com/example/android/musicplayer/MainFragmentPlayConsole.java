@@ -1,6 +1,8 @@
 package com.example.android.musicplayer;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -47,7 +49,7 @@ public class MainFragmentPlayConsole extends Fragment {
     public static final int MEDIA_LOADER_UPDATE_ID = 2;
     private boolean isNewPlaylist = false;
     private Uri mPlaylistUri;
-    private FragmentActivity mMyContext;
+    private static FragmentActivity mMyContext;
     private TextView mBackToPlaylist;
     private TextView mTimerText;
     private SeekBar mSeekBar;
@@ -58,9 +60,9 @@ public class MainFragmentPlayConsole extends Fragment {
     private ImageView mMute;
     private int mPreviousVolume;
     private boolean mIsMute;
-    private ImageView mPlayButton;
-    private ImageView mNextButton;
-    private ImageView mPreviousButton;
+    private static ImageView mPlayButton;
+    private static ImageView mNextButton;
+    private static ImageView mPreviousButton;
     private Handler mSeekHandler = new Handler();
     private Runnable mRun = new Runnable() {
         @Override
@@ -220,6 +222,7 @@ public class MainFragmentPlayConsole extends Fragment {
                 mMediaPlayer = setMediaPlayer(mMediaPlayer, mPlayList.get(mMediaIndex).getmMedia());
                 mMediaPlayer.start();
                 mPlayButton.setImageResource(R.mipmap.pause_button_icon);
+                MainActivity.changePlayPauseIcon(R.mipmap.pause_button_icon);
                 mMediaPlayer.setOnCompletionListener(mCompletionListener);
                 updateMarqueeText(mPlayList.get(mMediaIndex));
                 mSeekBar.setMax(mMediaPlayer.getDuration());
@@ -245,12 +248,14 @@ public class MainFragmentPlayConsole extends Fragment {
                 if(mMediaPlayer != null && mMediaPlayer.isPlaying()){
                     mMediaPlayer.pause();
                     mPlayButton.setImageResource(R.mipmap.play_button_icon);
+                    MainActivity.changePlayPauseIcon(R.mipmap.play_button_icon);
                     Toast.makeText(getActivity(), getString(R.string.toast_pause), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if(mMediaPlayer != null && mMediaPlayer.getCurrentPosition() != 0) {
                     mMediaPlayer.start();
                     mPlayButton.setImageResource(R.mipmap.pause_button_icon);
+                    MainActivity.changePlayPauseIcon(R.mipmap.pause_button_icon);
                     Toast.makeText(getActivity(), getString(R.string.toast_continue), Toast.LENGTH_SHORT).show();
                 }
                 else if((mMediaPlayer == null && !mPlayList.isEmpty()) ||
@@ -261,6 +266,7 @@ public class MainFragmentPlayConsole extends Fragment {
                     mMediaPlayer = setMediaPlayer(mMediaPlayer, mPlayList.get(mMediaIndex).getmMedia());
                     mMediaPlayer.start();
                     mPlayButton.setImageResource(R.mipmap.pause_button_icon);
+                    MainActivity.changePlayPauseIcon(R.mipmap.pause_button_icon);
                     Log.v(LOG_TAG, "Start Playing!!!" + mPlayList.get(mMediaIndex).getmSongName());
                     mMediaPlayer.setOnCompletionListener(mCompletionListener);
                     updateMarqueeText(mPlayList.get(mMediaIndex));
@@ -667,6 +673,9 @@ public class MainFragmentPlayConsole extends Fragment {
         mPlayList.get(newPosition).setPlayingState(getString(R.string.playing_indicator));
         MediaListFragment.updateText(currentPosition, newPosition, mPlayList);
         CurrentMediaFragment.updateAlbumDisplay(newPosition, mPlayList);
+        MainActivity.updateSongName(mPlayList.get(newPosition).getmSongName());
+        MainActivity.updateArtistName(mPlayList.get(newPosition).getmArtistName());
+        MainActivity.updateAlbumImage(mPlayList.get(newPosition).getAlbumBitMap());
     }
 
     public MediaPlayer setMediaPlayer(MediaPlayer mediaPlayer, long songId) {
@@ -702,5 +711,25 @@ public class MainFragmentPlayConsole extends Fragment {
         mPlaylistUri = newPlaylistUri;
         getActivity().getLoaderManager().restartLoader(MEDIA_LOADER_UPDATE_ID, null, songLoaderCallBack);
         Log.v(LOG_TAG, "Loader restarted new playlist Uri: " + mPlaylistUri);
+    }
+
+    public static class NotificationBroadcastReceiver extends BroadcastReceiver{
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            switch (action){
+                case NotificationActions.ACTION_PLAY_PAUSE:
+                    mPlayButton.callOnClick();
+                    break;
+                case NotificationActions.ACTION_NEXT:
+                    mNextButton.callOnClick();
+                    break;
+                case NotificationActions.ACTION_PREVIOUS:
+                    mPreviousButton.callOnClick();
+                    break;
+                default: break;
+            }
+        }
     }
 }

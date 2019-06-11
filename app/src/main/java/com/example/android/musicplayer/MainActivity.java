@@ -5,8 +5,11 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -18,6 +21,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.RemoteViews;
+import android.widget.TextView;
 
 import com.example.android.musicplayer.PlayItemFragmentViewPager.ZoomOutPageTransformer;
 
@@ -33,10 +37,11 @@ public class MainActivity extends AppCompatActivity  {
     private List<Fragment> mFragmentList;
     private static ViewPager mFragmentContainerMain;
 
-    private NotificationManager mNotificationManager;
+    private static NotificationManager mNotificationManager;
     private NotificationChannel mNotificationChannel;
-    private RemoteViews mNotificationView;
-    private Notification mNotification;
+    private static RemoteViews mNotificationView;
+    private static NotificationCompat.Builder mBuilder;
+    private static Notification mNotification;
     private static final int NOTIFICATION_ID = 100;
     private static final String CHANNEL_ID = "channel01";
     private static final String CHANNEL_NAME = "Notification channel";
@@ -109,19 +114,84 @@ public class MainActivity extends AppCompatActivity  {
         mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
         PendingIntent pendingIntent = PendingIntent.getActivity(MainActivity.this, 0, mainIntent,0);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+        mBuilder = new NotificationCompat.Builder(this);
         mNotificationView = new RemoteViews(getPackageName(), R.layout.notification_layout);
-        builder.setContentIntent(pendingIntent);
-        builder.setContent(mNotificationView);
-        builder.setChannelId(CHANNEL_ID);
-        builder.setSmallIcon(R.drawable.pets_icon);
-        builder.setOngoing(true);
-        mNotification = builder.build();
+
+        Intent switchIntentPlayPause = new Intent(NotificationActions.ACTION_PLAY_PAUSE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            ComponentName componentName = new ComponentName(getPackageName(),getPackageName() + ".MainFragmentPlayConsole$NotificationBroadcastReceiver");
+            switchIntentPlayPause.setComponent(componentName);
+        }
+        PendingIntent pendingSwitchIntentPlayPause = PendingIntent.getBroadcast(this, 100, switchIntentPlayPause, 0);
+        mNotificationView.setOnClickPendingIntent(R.id.notification_play_btn, pendingSwitchIntentPlayPause);
+
+        Intent switchIntentNext = new Intent(NotificationActions.ACTION_NEXT);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            ComponentName componentName = new ComponentName(getPackageName(),getPackageName() + ".MainFragmentPlayConsole$NotificationBroadcastReceiver");
+            switchIntentNext.setComponent(componentName);
+        }
+        PendingIntent pendingSwitchIntentNext = PendingIntent.getBroadcast(this, 100, switchIntentNext, 0);
+        mNotificationView.setOnClickPendingIntent(R.id.notification_next_btn, pendingSwitchIntentNext);
+
+        Intent switchIntentPrevious = new Intent(NotificationActions.ACTION_PREVIOUS);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            ComponentName componentName = new ComponentName(getPackageName(),getPackageName() + ".MainFragmentPlayConsole$NotificationBroadcastReceiver");
+            switchIntentPrevious.setComponent(componentName);
+        }
+        PendingIntent pendingSwitchIntentPrevious = PendingIntent.getBroadcast(this, 100, switchIntentPrevious, 0);
+        mNotificationView.setOnClickPendingIntent(R.id.notification_previous_btn, pendingSwitchIntentPrevious);
+
+        mBuilder.setContentIntent(pendingIntent);
+        mBuilder.setContent(mNotificationView);
+        mBuilder.setChannelId(CHANNEL_ID);
+        mBuilder.setSmallIcon(R.drawable.pets_icon);
+        mBuilder.setOngoing(true);
+        mNotification = mBuilder.build();
     }
 
     private void showNotification(){
         mNotificationManager.notify(NOTIFICATION_ID, mNotification);
         Log.v(LOG_TAG, "Show notification called");
+    }
+
+    public static void changePlayPauseIcon(int id){
+        int api = Build.VERSION.SDK_INT;
+        mNotificationView.setImageViewResource(R.id.notification_play_btn, id);
+        if (api < Build.VERSION_CODES.HONEYCOMB) {
+            mNotificationManager.notify(NOTIFICATION_ID, mNotification);
+        }else if (api >= Build.VERSION_CODES.HONEYCOMB) {
+            mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+        }
+    }
+
+    public static void updateSongName(String songName){
+        int api = Build.VERSION.SDK_INT;
+        mNotificationView.setTextViewText(R.id.notification_song_name, songName);
+        if (api < Build.VERSION_CODES.HONEYCOMB) {
+            mNotificationManager.notify(NOTIFICATION_ID, mNotification);
+        }else if (api >= Build.VERSION_CODES.HONEYCOMB) {
+            mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+        }
+    }
+
+    public static void updateArtistName(String artistName){
+        int api = Build.VERSION.SDK_INT;
+        mNotificationView.setTextViewText(R.id.notification_artist_name, artistName);
+        if (api < Build.VERSION_CODES.HONEYCOMB) {
+            mNotificationManager.notify(NOTIFICATION_ID, mNotification);
+        }else if (api >= Build.VERSION_CODES.HONEYCOMB) {
+            mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+        }
+    }
+
+    public static void updateAlbumImage(Bitmap bm){
+        int api = Build.VERSION.SDK_INT;
+        mNotificationView.setImageViewBitmap(R.id.notification_album_image, bm);
+        if (api < Build.VERSION_CODES.HONEYCOMB) {
+            mNotificationManager.notify(NOTIFICATION_ID, mNotification);
+        }else if (api >= Build.VERSION_CODES.HONEYCOMB) {
+            mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+        }
     }
 
     @Override
