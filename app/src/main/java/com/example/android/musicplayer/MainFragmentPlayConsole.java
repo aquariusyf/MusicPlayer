@@ -159,6 +159,7 @@ public class MainFragmentPlayConsole extends Fragment {
                 mMediaPlayer = setMediaPlayer(mMediaPlayer, mPlayList.get(mMediaIndex).getmMedia());
                 mMediaPlayer.start();
                 mPlayButton.setImageResource(R.mipmap.pause_button_icon);
+                MainActivity.changePlayPauseIcon(R.mipmap.pause_button_icon);
                 Log.v(LOG_TAG, "Start Playing!!!" + mPlayList.get(mMediaIndex).getmSongName());
                 mMediaPlayer.setOnCompletionListener(mCompletionListener);
                 updateMarqueeText(mPlayList.get(mMediaIndex));
