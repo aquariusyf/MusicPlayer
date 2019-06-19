@@ -5,19 +5,91 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/play_item"
-    android:layout_margin="8dp"
+    android:layout_margin="16dp"
     android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/song_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:gravity="center_horizontal"
-        android:textColor="#FFFFFF"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:fontFamily="@font/lishu"
-        tools:text="SONG NAME" />
+    <ImageView
+        android:id="@+id/album_image"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:maxWidth="45dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginBottom="8dp"
+        android:scaleType="fitXY"/>
 
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="3"
+        android:orientation="vertical"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="3dp"
+        android:layout_marginBottom="8dp">
+
+        <TextView
+            android:id="@+id/song_name"
+            android:layout_width="220dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="2dp"
+            android:gravity="left"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/calibri"
+            android:singleLine="true"
+            tools:text="Song Name" />
+
+        <TextView
+            android:id="@+id/artist_name"
+            android:layout_width="220dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="2dp"
+            android:gravity="left"
+            android:textColor="#BDC1D5"
+            android:textSize="10sp"
+            android:textStyle="normal"
+            android:fontFamily="@font/calibri"
+            android:singleLine="true"
+            tools:text="Artist Name" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="18dp">
+
+        <TextView
+            android:id="@+id/song_duration"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_gravity="left"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            android:textStyle="normal"
+            android:fontFamily="@font/calibri"
+            tools:text="05:30"/>
+
+        <TextView
+            android:id="@+id/is_playing"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_gravity="left"
+            android:layout_marginTop="2dp"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/calibri"
+            tools:text="Playing"/>
+
+    </LinearLayout>
 </LinearLayout>

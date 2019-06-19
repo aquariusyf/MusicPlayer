@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/custom_background_color">
+
+    <ImageView
+        android:src="@drawable/sound_track_image"
+        android:id="@+id/notification_album_image"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:maxWidth="45dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginBottom="8dp" />
+
+    <LinearLayout
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="8dp">
+
+        <TextView
+            android:id="@+id/notification_song_name"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1.3"
+            android:layout_marginBottom="2dp"
+            android:gravity="left"
+            tools:text="Song Name"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/calibri"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:fadingEdge="horizontal"
+            android:scrollHorizontally="false"
+            android:focusable="true"
+            android:focusedByDefault="true"
+            android:focusableInTouchMode="true"
+            android:marqueeRepeatLimit="marquee_forever">
+            <requestFocus/>
+        </TextView>
+
+        <TextView
+            android:id="@+id/notification_artist_name"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="2dp"
+            android:gravity="left"
+            tools:text="Artist Name"
+            android:textColor="#BDC1D5"
+            android:textSize="14sp"
+            android:textStyle="normal"
+            android:fontFamily="@font/calibri"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:fadingEdge="horizontal"
+            android:scrollHorizontally="false"
+            android:focusable="true"
+            android:focusedByDefault="true"
+            android:focusableInTouchMode="true"
+            android:marqueeRepeatLimit="marquee_forever">
+            <requestFocus/>
+        </TextView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="16dp">
+
+        <ImageView
+            android:src="@drawable/baseline_skip_previous_white_18dp"
+            android:id="@+id/notification_previous_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_gravity="center_vertical"/>
+
+        <ImageView
+            android:src="@mipmap/play_button_icon"
+            android:id="@+id/notification_play_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
+
+        <ImageView
+            android:src="@drawable/baseline_skip_next_white_18dp"
+            android:id="@+id/notification_next_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"/>
+
+    </LinearLayout>
+
+</LinearLayout>

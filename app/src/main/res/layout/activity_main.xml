@@ -1,126 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<com.sothree.slidinguppanel.SlidingUpPanelLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@drawable/dark_star_background">
+    android:layout_gravity="bottom"
+    android:gravity="bottom"
+    android:animateLayoutChanges="true"
+    app:umanoPanelHeight="0dp"
+    app:umanoShadowHeight="4dp">
 
-    <ListView
+    <android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/main_activity_viewpager_container"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:id="@+id/play_list"
-        android:orientation="vertical"
-        android:layout_margin="16dp">
+        android:layout_height="match_parent"
+        android:background="@drawable/custom_background_color">
 
-    </ListView>
-
-    <TextView
-        android:id="@+id/marquee_text"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="32dp"
-        android:ellipsize="marquee"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:fontFamily="@font/xinchaoti"
-        android:gravity="center"
-        android:marqueeRepeatLimit="marquee_forever"
-        android:singleLine="true"
-        android:textColor="#9932CC"
-        android:textSize="24sp"
-        tools:text="告白气球" />
-
-    <SeekBar
-        android:id="@+id/seekbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:thumbTint="#F5F5F5"
-        android:progressTint="#FFFFFF"
-        android:progressBackgroundTint="#FFF8DC"
-        android:thumb="@drawable/baseline_audiotrack_white_18dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="48dp"/>
-
-    <TextView
-        android:id="@+id/timer_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="8dp"
-        android:textColor="#FFFFFF"
-        android:fontFamily="@font/charlotte"
-        android:text="00 : 00"/>
+    </android.support.v4.view.ViewPager>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="24dp"
-        android:layout_marginLeft="75dp"
-        android:layout_marginRight="75dp">
-
-        <ImageView
-            android:src="@drawable/baseline_skip_previous_white_18dp"
-            android:id="@+id/previous_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_margin="16dp"
-            android:layout_above="@+id/play_btn"
-            android:layout_alignParentLeft="true"/>
-
-        <ImageView
-            android:src="@drawable/baseline_skip_next_white_18dp"
-            android:id="@+id/next_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_margin="16dp"
-            android:layout_above="@+id/stop_btn"
-            android:layout_alignParentRight="true"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:src="@drawable/baseline_pause_circle_outline_white_18dp"
-            android:id="@+id/pause_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_margin="16dp"
-            android:layout_toRightOf="@+id/play_btn"
-            android:layout_alignParentBottom="true"/>
-
-        <ImageView
-            android:src="@drawable/baseline_play_circle_outline_white_18dp"
-        android:id="@+id/play_btn"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_margin="16dp"
-        android:layout_alignParentBottom="true" />
+        android:layout_height="wrap_content"></LinearLayout>
 
-    <ImageView
-        android:src="@drawable/baseline_stop_white_18dp"
-        android:id="@+id/stop_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_margin="16dp"
-        android:layout_toRightOf="@+id/pause_btn"
-        android:layout_alignParentBottom="true"/>
-
-    </LinearLayout>
-
-</LinearLayout>
+</com.sothree.slidinguppanel.SlidingUpPanelLayout>

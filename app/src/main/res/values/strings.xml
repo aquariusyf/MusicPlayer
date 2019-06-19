@@ -1,3 +1,19 @@
 <resources>
     <string name="app_name">MusicPlayer</string>
+    <string name="load_music_failed">Load songs failed!</string>
+    <string name="toast_playing">PLAYING</string>
+    <string name="toast_continue">CONTINUE</string>
+    <string name="toast_pause">PAUSED</string>
+    <string name="toast_next">NEXT</string>
+    <string name="toast_previous">PREVIOUS</string>
+    <string name="toast_no_song_found">NO SONGS FOUND</string>
+    <string name="no_songs">0 Songs</string>
+    <string name="mute">Mute</string>
+    <string name="unmute">Unmute</string>
+    <string name="playing_indicator">Playing</string>
+    <string name="empty_playlist_name_prompt">Please input a name</string>
+    <string name="playlist_added">Playlist added</string>
+    <string name="action_new_playlist">New Playlist</string>
+    <string name="action_edit">Edit</string>
+
 </resources>
